@@ -1,7 +1,7 @@
 function HomePage() {
   return (
     <div className="bg-black">
-      <h1>Welcome to the Home Page</h1>
+      <h1 className="text-red-500">Welcome to the Home Page</h1>
       <p>This is the home page of the remote work management system.</p>
     </div>
   );
