@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.app {
+  @apply mx-8
+	my-0
+	tracking-wide
+	font-main;
+}

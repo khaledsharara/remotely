@@ -1,7 +1,7 @@
 function LoginPage() {
   return (
     <div className="w-full h-screen">
-      <div className="bg-gradient-to-l from-primary to-70% mx-8 w-full h-full flex flex-col gap-2 justify-center items-center">
+      <div className="bg-gradient-to-l from-primary to-70% w-full h-full flex flex-col gap-2 justify-center items-center">
         <div className="mb-8 text-title text-white">Log In</div>
         <input
           className="mt-1 w-[25%] px-3 py-2 border-0 border-b-2 border-primary bg-transparent"
