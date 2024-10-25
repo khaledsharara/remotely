@@ -23,8 +23,8 @@ function LoginPage() {
             role: userInfo.role,
           })
         );
+        navigate("/home");
       }
-      navigate("/home");
     } catch (error) {
       console.error("Login failed", error);
     }
