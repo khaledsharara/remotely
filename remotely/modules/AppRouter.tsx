@@ -9,6 +9,7 @@ import ProtectedRoute from "./shared/utils/ProtectedRoutes";
 import NavBar from "./shared/components/NavBar";
 import { useSelector } from "react-redux";
 import { selectUser } from "./shared/utils/userSlice";
+import { ProfilePage } from "./employee/profile/App";
 
 function AppRouter() {
   const user = useSelector(selectUser);
@@ -33,6 +34,15 @@ function AppRouter() {
         <ProtectedRoute allowedRoles={["employee"]}>
           <NavBar />
           <EmployeeHomePage />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/profile",
+      element: (
+        <ProtectedRoute allowedRoles={["employee"]}>
+          <NavBar />
+          <ProfilePage />
         </ProtectedRoute>
       ),
     },

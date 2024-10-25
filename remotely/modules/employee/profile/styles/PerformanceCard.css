@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* BIG BOSS */
+.performance-card-root {
+  @apply w-full 
+		h-full min-h-[150px]
+        bg-black
+		border-2 border-solid border-black rounded-[30px]
+		px-[2rem] py-[1rem];
+}
+
+/* BODY STUFF */
+
+.performance-card-body {
+  @apply w-full
+        h-full
+        grid grid-rows-[50%_50%];
+}
+
+.performance-root-on {
+  @apply h-[750px]
+	w-full
+	flex flex-col gap-4
+	items-center;
+}
+
+.performance-title {
+  @apply w-full
+	text-white text-xl
+	self-start
+	border-b-[1px] border-white;
+}

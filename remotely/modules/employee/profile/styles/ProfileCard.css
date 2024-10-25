@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* BIG BOSS */
+.profile-card-root {
+  @apply w-full 
+		h-full min-h-[150px] max-h-[150px] 
+		border-2 border-solid border-black rounded-[30px]
+		grid grid-cols-2
+		px-[2rem] py-[1rem];
+}
+
+/* BODY STUFF */
+.profile-card-body {
+  @apply w-full
+		h-full
+		grid grid-rows-[50%_50%];
+}
+
+/* NAMESSSSS */
+.profile-card-body-header {
+  @apply w-full h-full
+			text-title;
+}
+
+/* BORING STUFFFF LIKE TYPE AND BUTTONS */
+.profile-card-body-content {
+  @apply w-full h-full
+			flex flex-row gap-2
+			items-center place-items-start;
+}
+
+.profile-card-body-type {
+  @apply w-fit h-fit
+			border-[1px] border-solid border-black rounded-[30px]
+			px-4 text-sm text-black;
+}
+
+.profile-card-body-button {
+  @apply w-fit h-fit
+			bg-[#166FFF50]/50
+			rounded-[30px]
+			px-4
+			flex flex-row gap-2
+			items-center justify-center;
+}
+
+.profile-card-body-button-text {
+  @apply opacity-100
+			text-black;
+}
+
+.profile-card-body-button-icon {
+  @apply opacity-100;
+}
+
+.profile-card-body-email {
+  @apply w-fit h-fit
+			flex flex-row gap-2
+			items-center justify-center;
+}
+
+.profile-card-body-email-text {
+  @apply w-full h-full
+  			px-4
+			text-sm text-black;
+}
+
+/* profile piczzzzz */
+.profile-card-profile-icon {
+  @apply h-[75%]
+		self-center
+		place-self-end;
+}
+
+/* account for when the window is tooo tiny */
+@media (max-width: 768px) {
+  .profile-card-root {
+    @apply w-full  min-w-[400px] max-w-[400px]
+			h-full min-h-[150px] max-h-[150px] 
+			border-2 border-solid border-black rounded-[30px]
+			grid grid-cols-1
+			px-[2rem] py-[1rem]
+			justify-center;
+  }
+
+  .profile-card-body {
+    @apply w-full
+			h-full
+			grid grid-rows-[50%_50%]
+			justify-center;
+  }
+
+  .profile-card-profile-icon {
+    @apply hidden;
+  }
+}
