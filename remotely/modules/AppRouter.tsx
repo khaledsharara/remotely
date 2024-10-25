@@ -1,17 +1,21 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { useSelector } from "react-redux";
-
-// import { HomePage } from "./employee/App";
+import { HomePage as EmployeeHomePage } from "./employee/home/App";
 import { LoginPage } from "./auth/App";
-import { selectUser } from "./shared/utils/userSlice";
+import ProtectedRoute from "./shared/utils/ProtectedRoutes";
 
 function AppRouter() {
-  const user = useSelector(selectUser);
-  console.log("user", user);
   const router = createBrowserRouter([
     {
       path: "/",
       element: <LoginPage />,
+    },
+    {
+      path: "/home",
+      element: (
+        <ProtectedRoute allowedRoles={["employee"]}>
+          <EmployeeHomePage />
+        </ProtectedRoute>
+      ),
     },
   ]);
 

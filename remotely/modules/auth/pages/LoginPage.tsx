@@ -3,9 +3,11 @@ import { handleLogin } from "../utils/authApis";
 import { useDispatch } from "react-redux";
 import { login } from "../../shared/utils/userSlice";
 import { userInfo } from "../utils/types";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -22,6 +24,7 @@ function LoginPage() {
           })
         );
       }
+      navigate("/home");
     } catch (error) {
       console.error("Login failed", error);
     }
