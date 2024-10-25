@@ -7,12 +7,20 @@ interface UserState {
   role: string | null;
 }
 
-const initialState: UserState = {
-  user: null,
-  token: null,
-  name: null,
-  role: null,
+// Load user data from local storage
+const loadUserFromLocalStorage = (): UserState => {
+  const userData = localStorage.getItem("user");
+  return userData
+    ? JSON.parse(userData)
+    : {
+        user: null,
+        token: null,
+        name: null,
+        role: null,
+      };
 };
+
+const initialState: UserState = loadUserFromLocalStorage();
 
 const userSlice = createSlice({
   name: "user",
@@ -31,12 +39,18 @@ const userSlice = createSlice({
       state.token = action.payload.token;
       state.name = action.payload.name;
       state.role = action.payload.role;
+
+      // Save user data to local storage
+      localStorage.setItem("user", JSON.stringify(state));
     },
     logout: (state) => {
       state.user = null;
       state.token = null;
       state.name = null;
       state.role = null;
+
+      // Clear user data from local storage
+      localStorage.removeItem("user");
     },
   },
 });

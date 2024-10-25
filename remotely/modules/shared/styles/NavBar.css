@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.NavBarRoot {
+  @apply col-span-2
+	flex
+	flex-row
+	justify-center
+	space-x-4
+	items-center
+	text-black
+	py-4
+	truncate
+	overflow-scroll;
+}
+
+.NavButton {
+  @apply flex-initial
+	px-4
+	text-black
+	text-nav;
+}

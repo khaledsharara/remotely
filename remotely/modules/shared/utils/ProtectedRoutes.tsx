@@ -17,7 +17,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Check if the user exists and if their role is included in the allowed roles
   if (!user || !user.role || !allowedRoles.includes(user.role)) {
     // Redirect to login if not authorized
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   // Render the child components if authorized
