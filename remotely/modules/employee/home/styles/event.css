@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* BIG BOI STUFF */
+.event-root {
+  @apply w-full
+		overflow-y-scroll;
+}
+
+.event-content {
+  @apply grid auto-rows-max gap-4
+		my-2;
+}
+
+/* event card */
+.event {
+  @apply w-full
+		flex flex-col gap-2;
+}
+
+.event-date {
+  @apply pt-2 
+		text-black text-l;
+}
+
+.event-card {
+  @apply h-[70px]
+		bg-primary
+
+
+		rounded-[30px]
+		px-8 py-4
+
+		flex flex-row gap-4
+		justify-between
+		place-items-center;
+}
+
+.event-body {
+  @apply flex flex-col gap-[0.2rem];
+}
+
+.event-title {
+  @apply text-white text-l
+		text-nowrap overflow-hidden text-ellipsis
+		w-full max-w-[150px] min-w-[100px];
+}
+
+.event-link {
+  @apply text-white text-m
+		w-fit;
+}
+
+.event-time {
+  @apply text-white text-xl text-nowrap;
+}
+
+/* tiny stuff */
+@media (max-width: 768px) {
+  .event-card {
+    @apply px-4 py-2
+			flex flex-col gap-2
+			justify-evenly;
+  }
+
+  .event-title {
+    @apply text-m;
+  }
+
+  .event-time {
+    @apply text-m;
+  }
+
+  .event-link {
+    @apply hidden;
+  }
+}

@@ -1,7 +1,62 @@
+import { FaArrowRightLong } from "react-icons/fa6";
+import profile from "../../../../public/profile.svg";
+import "../styles/ProfileCard.css";
+import CalendarCard from "../components/CalendarCard";
+import AltActivityFeed from "../components/AltActivityFeed";
+
+const user = {
+  name: "John Doe",
+  role: "Employee",
+  email: "john@email.com",
+};
+
 function HomePage() {
   return (
-    <div>
-      <h1>Home Page</h1>
+    <div className="w-full h-screen">
+      <div className="px-8 py-4">
+        <div className="home-page-root">
+          <div className="profile-card-root">
+            <div className="profile-card-body">
+              {/* name */}
+              <div className="profile-card-body-header">{user.name}</div>
+              {/* content */}
+              <div className="profile-card-body-content">
+                <div className="profile-card-body-type">Student</div>
+                {user.email ? (
+                  <div className=".profile-card-body-email">
+                    <div className="profile-card-body-email-text">
+                      {user.email}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="profile-card-body-button">
+                    <a
+                      className="profile-card-body-button-text"
+                      href="/profile"
+                    >
+                      View Profile
+                    </a>
+                    <div className="profile-card-body-button-icon">
+                      <FaArrowRightLong className="profile-card-arrow-icon" />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <img
+              src={profile}
+              alt={"NA"}
+              className="profile-card-profile-icon"
+            />
+          </div>
+          <div className="mt-5">
+            <CalendarCard />
+          </div>
+          <div className="mt-5 mx-5">
+            <AltActivityFeed />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

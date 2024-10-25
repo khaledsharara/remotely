@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* big boi */
+.AAF-root-on {
+  @apply h-[750px]
+	w-full
+	flex flex-col gap-4
+	items-center;
+}
+
+.AAF-root-off {
+}
+
+.AAF-title {
+  @apply w-full
+	text-black text-xl
+	self-start
+	border-b-[1px] border-black;
+}

@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* root */
+.calendar-root {
+  @apply bg-button
+		w-full
+		h-full
+		grid grid-rows-[10%_90%] gap-[8px]
+		grid-flow-dense
+		justify-stretch;
+}
+
+/* Month card */
+.calendar-month {
+  @apply w-full
+		border-[1px] rounded-[30px] border-primary
+		px-4
+		text-primary text-l 
+		self-start
+		w-fit;
+}
+
+/* calendar */
+.calendar {
+  @apply min-w-[200px] max-w-[350px]
+		h-full
+		grid grid-rows-[auto_1px_auto];
+}
+
+/* header */
+.calendar-header {
+  @apply w-full 
+			grid grid-flow-col gap-2
+			items-center justify-evenly 
+			auto-cols-min;
+}
+
+.calendar-header-day {
+  @apply w-fit h-fit
+			text-primary;
+}
+
+.calendar-header-divider {
+  @apply w-full 
+			h-[1px]
+			border-0 bg-primary;
+}
+
+/* BODY */
+.calendar-body {
+  @apply w-full
+			grid auto-rows-max;
+}
+
+.calendar-body-row {
+  @apply grid auto-rows-max
+			h-fit
+			self-center
+			place-items-center
+			py-[0.25rem];
+}
+
+.calendar-body-day {
+  @apply text-l;
+}
+
+.calendar-body-divider {
+  @apply w-full 
+			h-[1px]
+			border-0 bg-black;
+}

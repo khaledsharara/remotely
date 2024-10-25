@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* BIG BOI STUFF */
+.calendar-card-root {
+  @apply w-full h-[350px]
+		bg-button
+		rounded-[30px];
+}
+
+.calendar-card-content {
+  @apply h-full
+		justify-self-center
+		px-[4vw] py-[4vh]
+		grid grid-cols-[40%_60%] gap-2
+		justify-stretch;
+}
+
+/* month calendar stuff */
+.calendar-card-calendar-root {
+  @apply h-full
+		w-full
+		grid-flow-row-dense
+		grid grid-rows-[15%_auto] gap-2;
+}
+
+.calendar-card-calendar-title {
+  @apply w-full h-full
+		text-xl;
+}
+
+.calendar-card-calendar-calendar {
+  @apply w-full h-full
+		flex;
+}
+
+/* events stuff */
+.calendar-card-events-root {
+  @apply h-full 
+		overflow-y-auto
+		w-full
+		flex;
+}
+
+/* tiny stuff */
+@media (max-width: 768px) {
+  .calendar-card-root {
+    @apply h-[450px];
+  }
+
+  .calendar-card-content {
+    @apply px-[4vw] py-[4vh]
+			grid-cols-none;
+  }
+  .calendar-card-calendar-root {
+    @apply hidden;
+  }
+
+  .calendar-card-events-root {
+    @apply w-full;
+  }
+}

@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.home-page-root {
+  @apply h-[90%]
+	w-full
+	flex flex-col gap-4
+	items-center justify-center;
+}
