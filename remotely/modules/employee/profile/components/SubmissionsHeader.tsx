@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 type CheckedValues = {
   [key: string]: boolean; // Define that the keys are strings and values are booleans
 };
 
 function SubmissionsHeader() {
-  const [filters] = useState<string[]>(['Announcements', 'Homework', 'Material', 'Quizzes']);
-  const [subHeadlines] = useState<string[]>(['Projects', 'Exams', 'Lectures', 'Assignments']);
+  const [filters] = useState<string[]>([
+    "Announcements",
+    "Homework",
+    "Material",
+    "Quizzes",
+  ]);
+  const [subHeadlines] = useState<string[]>([
+    "Projects",
+    "Exams",
+    "Lectures",
+    "Assignments",
+  ]);
   const [checkedValues, setCheckedValues] = useState<CheckedValues>({}); // Use the defined type
 
   // Handle checkbox change
@@ -27,7 +37,7 @@ function SubmissionsHeader() {
             type="search"
             name="search"
             placeholder="Search..."
-            className="w-full bg-transparent px-5 pr-10 rounded-full text-sm border-2 border-solid border-black focus:border-black focus:ring-0 focus:outline-none"
+            className="w-full bg-transparent px-5 pr-10 h-full rounded-full text-sm border-2 border-solid border-black focus:border-black focus:ring-0 focus:outline-none"
           />
           <button type="submit" className="absolute right-0 top-0 mt-4 mr-4">
             <svg
@@ -74,7 +84,10 @@ function SubmissionsHeader() {
                     checked={!!checkedValues[subject]}
                     onChange={() => handleCheckboxChange(subject)}
                   />
-                  <label htmlFor={`cb-filters-${index}`} className="check-box" />
+                  <label
+                    htmlFor={`cb-filters-${index}`}
+                    className="check-box"
+                  />
                 </div>
               </li>
             ))}
