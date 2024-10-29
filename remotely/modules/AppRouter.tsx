@@ -10,6 +10,8 @@ import NavBar from "./shared/components/NavBar";
 import { useSelector } from "react-redux";
 import { selectUser } from "./shared/utils/userSlice";
 import { ProfilePage } from "./employee/profile/App";
+import Dashboard from "./Manager/Dashboard/pages/Dashboard";
+import Task from "./Manager/Dashboard/pages/Task";
 
 function AppRouter() {
   const user = useSelector(selectUser);
@@ -45,6 +47,20 @@ function AppRouter() {
           <ProfilePage />
         </ProtectedRoute>
       ),
+    },
+    {
+      path: "/dashboard",
+      element: (
+        <ProtectedRoute allowedRoles={["manager"]}>
+          <NavBar />
+          <Dashboard />
+        </ProtectedRoute>
+      ),
+      children: [
+        { path: "", element: <Navigate to="tasks" replace /> },
+        { path: "tasks", element: <Task /> },
+        { path: "tasks/addTasks", element: <Task /> },
+      ],
     },
   ]);
 
