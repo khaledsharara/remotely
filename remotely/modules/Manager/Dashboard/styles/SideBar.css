@@ -1,0 +1,91 @@
+.checkbox-wrapper-19 {
+  box-sizing: border-box;
+  --background-color: #fff;
+  --checkbox-height: 15px;
+  display: inline-flex; /* Aligns the checkbox vertically within its container */
+  align-items: center; /* Centers the checkbox vertically */
+  padding: 0; /* Removes any padding */
+  margin: 0; /* Removes any margin */
+}
+
+@keyframes dothabottomcheck-19 {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: calc(var(--checkbox-height) / 2.1);
+  }
+}
+
+@keyframes dothatopcheck-19 {
+  0% {
+    height: 0;
+  }
+  50% {
+    height: 0;
+  }
+  100% {
+    height: calc(var(--checkbox-height));
+  }
+}
+
+.checkbox-wrapper-19 input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-wrapper-19 .check-box {
+  height: var(--checkbox-height);
+  width: var(--checkbox-height);
+  background-color: transparent;
+  border: calc(var(--checkbox-height) * 0.11) solid #000;
+  border-radius: 3px;
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  transition: border-color ease 0.2s;
+  cursor: pointer;
+}
+
+.checkbox-wrapper-19 .check-box::before,
+.checkbox-wrapper-19 .check-box::after {
+  box-sizing: border-box;
+  position: absolute;
+  height: 0;
+  width: calc(var(--checkbox-height) * 0.1);
+  background-color: #287aff;
+  display: inline-block;
+  transform-origin: left top;
+  border-radius: 5px;
+  content: " ";
+  transition: opacity ease 0.5s;
+}
+
+.checkbox-wrapper-19 .check-box::before {
+  top: calc(var(--checkbox-height) * 0.72);
+  left: calc(var(--checkbox-height) * 0.41);
+  transform: rotate(-135deg);
+}
+
+.checkbox-wrapper-19 .check-box::after {
+  top: calc(var(--checkbox-height) * 0.37);
+  left: calc(var(--checkbox-height) * 0.05);
+  transform: rotate(-45deg);
+}
+
+.checkbox-wrapper-19 input[type="checkbox"]:checked + .check-box,
+.checkbox-wrapper-19 .check-box.checked {
+  border-color: #287aff;
+}
+
+.checkbox-wrapper-19 input[type="checkbox"]:checked + .check-box::after,
+.checkbox-wrapper-19 .check-box.checked::after {
+  height: calc(var(--checkbox-height) / 2);
+  animation: dothabottomcheck-19 0.1s ease 0s forwards;
+}
+
+.checkbox-wrapper-19 input[type="checkbox"]:checked + .check-box::before,
+.checkbox-wrapper-19 .check-box.checked::before {
+  height: calc(var(--checkbox-height) * 1.2);
+  animation: dothatopcheck-19 0.15s ease 0s forwards;
+  box-shadow: 0 0 0 calc(var(--checkbox-height) * 0.12) #bfbfbf !important;
+}

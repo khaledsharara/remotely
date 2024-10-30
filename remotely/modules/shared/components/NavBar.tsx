@@ -41,9 +41,34 @@ function NavBar() {
         </button>
       </div>
     );
+  } else {
   }
 
-  return null;
+  return (
+    <div className="grid grid-cols-4">
+      <div className="NavBarRoot col-start-2 col-span-2">
+        <div
+          className={`NavButton ${
+            currentTab === "dashboard" && "text-primary"
+          }`}
+        >
+          <a href="/dashboard">Dashboard</a>
+        </div>
+
+        <div
+          className={`NavButton ${currentTab === "profile" && "text-primary"}`}
+        >
+          <a href="/profile">Profile</a>
+        </div>
+      </div>
+      <button
+        className="justify-self-end mr-4 bg-primary w-fit h-fit self-center text-white rounded px-4 py-2 active:bg-primary-dark"
+        onClick={() => dispatch(logout())}
+      >
+        log out
+      </button>
+    </div>
+  );
 }
 
 export default NavBar;
