@@ -1,6 +1,9 @@
 import EmployeeStreamCard from "../components/EmployeeStreamCard";
+import { useNavigate } from "react-router-dom";
 
 function Task() {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col items-center w-full p-4">
       {/* Row for Search Bar and Add Task button */}
@@ -33,7 +36,10 @@ function Task() {
         </div>
 
         {/* Add Task Button */}
-        <button className="ml-4 rounded-lg bg-blue-500 px-4 py-2 text-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button
+          className="ml-4 rounded-lg bg-blue-500 px-4 py-2 text-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onClick={() => navigate("addTasks")}
+        >
           Add Task
         </button>
       </div>

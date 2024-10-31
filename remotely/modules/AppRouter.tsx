@@ -12,10 +12,17 @@ import { selectUser } from "./shared/utils/userSlice";
 import { ProfilePage } from "./employee/profile/App";
 import Dashboard from "./Manager/Dashboard/pages/Dashboard";
 import Task from "./Manager/Dashboard/pages/Task";
+import AddTasks from "./Manager/Dashboard/pages/AddTasks"; // Import AddTasks component
+
+function ErrorBoundary() {
+  return (
+    <div>Oops! This page does not exist or there was an error loading it.</div>
+  );
+}
 
 function AppRouter() {
   const user = useSelector(selectUser);
-  console.log(user, "user");
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -29,6 +36,7 @@ function AppRouter() {
         ) : (
           <LoginPage />
         ),
+      errorElement: <ErrorBoundary />, // Adding errorElement for a custom error message
     },
     {
       path: "/home",
@@ -38,6 +46,7 @@ function AppRouter() {
           <EmployeeHomePage />
         </ProtectedRoute>
       ),
+      errorElement: <ErrorBoundary />,
     },
     {
       path: "/profile",
@@ -47,9 +56,10 @@ function AppRouter() {
           <ProfilePage />
         </ProtectedRoute>
       ),
+      errorElement: <ErrorBoundary />,
     },
     {
-      path: "/dashboard",
+      path: "dashboard/*",
       element: (
         <ProtectedRoute allowedRoles={["manager"]}>
           <NavBar />
@@ -59,8 +69,9 @@ function AppRouter() {
       children: [
         { path: "", element: <Navigate to="tasks" replace /> },
         { path: "tasks", element: <Task /> },
-        { path: "tasks/addTasks", element: <Task /> },
+        { path: "addTasks", element: <AddTasks /> }, // Ensure this path is correct
       ],
+      errorElement: <ErrorBoundary />,
     },
   ]);
 

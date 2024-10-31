@@ -8,7 +8,6 @@ function EmployeeStreamCard({
   subheadline = "Sample Subheadline",
   description = "This is a sample description of the activity. It provides an overview of the task details.",
   dueDate = "2024-10-31T00:00:00Z",
-  destination = null,
   attachments = [],
 }) {
   //constant values
