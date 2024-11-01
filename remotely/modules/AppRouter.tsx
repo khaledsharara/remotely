@@ -11,8 +11,9 @@ import { useSelector } from "react-redux";
 import { selectUser } from "./shared/utils/userSlice";
 import { ProfilePage } from "./employee/profile/App";
 import Dashboard from "./Manager/Dashboard/pages/Dashboard";
-import Task from "./Manager/Dashboard/pages/Task";
+import Tasks from "./Manager/Dashboard/pages/Task";
 import AddTasks from "./Manager/Dashboard/pages/AddTasks"; // Import AddTasks component
+import ViewTask from "./Manager/Dashboard/pages/ViewTasks";
 
 function ErrorBoundary() {
   return (
@@ -68,8 +69,9 @@ function AppRouter() {
       ),
       children: [
         { path: "", element: <Navigate to="tasks" replace /> },
-        { path: "tasks", element: <Task /> },
-        { path: "addTasks", element: <AddTasks /> }, // Ensure this path is correct
+        { path: "tasks", element: <Tasks /> },
+        { path: "add-tasks", element: <AddTasks /> },
+        { path: "view-task/:id", element: <ViewTask /> }, // Ensure this path is correct
       ],
       errorElement: <ErrorBoundary />,
     },

@@ -1,5 +1,6 @@
-//constant values
+import { useNavigate } from "react-router-dom";
 
+//constant values
 function EmployeeStreamCard({
   primaryKey = "1",
   activityType = "Homework",
@@ -28,10 +29,15 @@ function EmployeeStreamCard({
     return `${day}.${month}`;
   }
 
+  const navigate = useNavigate();
+
   return (
     <div
       key={primaryKey}
       className={`cursor-pointer group w-full rounded-2xl px-8 py-4 transition-all duration-300 ease-in-out h-[20%] min-h-[125px] max-h-[125px] hover:h-[40%] hover:min-h-[250px] hover:max-h-[250px] overflow-clip overflow-hidden ${activityClass}`}
+      onClick={() => {
+        navigate(`/dashboard/view-task/${primaryKey}`);
+      }}
     >
       <div className="flex flex-row">
         <div className="h-20 w-20 bg-gray-300 rounded-full" />
