@@ -52,7 +52,7 @@ function Sidebar() {
 
             <li className="w-full">
               <NavLink
-                to="teachers"
+                to="employees"
                 className={({ isActive }) =>
                   isActive
                     ? "text-primary border-r-2 border-primary w-full block p-2"
@@ -64,7 +64,7 @@ function Sidebar() {
             </li>
             <li className="w-full">
               <NavLink
-                to="grades"
+                to="analytics"
                 className={({ isActive }) =>
                   isActive
                     ? "text-primary border-r-2 border-primary w-full block p-2"
