@@ -4,8 +4,6 @@ function EmployeeLabelCard({
   activityType = "Missing",
   employeeName = "Employee Name",
   description = "This is a sample description of the activity. It provides an overview of the task details.",
-
-  attachments = [],
 }) {
   //constant values
 

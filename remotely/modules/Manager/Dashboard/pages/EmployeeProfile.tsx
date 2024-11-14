@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const employees = [
   { primaryKey: "1", name: "Ada Lovelace" },
   { primaryKey: "2", name: "Alan Turing" },
@@ -6,8 +8,12 @@ const employees = [
 ];
 
 function EmployeeProfile() {
-  // Using a placeholder teacher for demonstration
-  const teacher = employees[0];
+  // Using a placeholder employee for demonstration
+  const navigate = useNavigate();
+  const handleCardClick = (primaryKey: string) => {
+    navigate(`/dashboard/employees/logs/${primaryKey}`);
+  };
+  const employee = employees[0];
 
   // Array of tasks (could be static or dynamic)
   const tasks = Array(4).fill({
@@ -23,12 +29,15 @@ function EmployeeProfile() {
         {/* Big Name section */}
         <div className="flex flex-row justify-between border-black border-[1px] rounded-[30px] w-full px-[2rem] py-[1rem]">
           <div>
-            <div className="text-title font-medium">{teacher.name}</div>
+            <div className="text-title font-medium">{employee.name}</div>
             <div className="border-[1px] border-black w-fit rounded-full px-4 mt-2">
               Front-end
             </div>
             <div className="flex border-[1px] border-black w-fit rounded-full px-4 mt-2 ">
-              <button> Check logs</button>
+              <button onClick={() => handleCardClick(employee.primaryKey)}>
+                {" "}
+                Check logs
+              </button>
             </div>
           </div>
           <img alt="Profile pic" className="h-32 justify-self-center" />

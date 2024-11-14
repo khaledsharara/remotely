@@ -16,6 +16,7 @@ import AddTasks from "./Manager/Dashboard/pages/AddTasks"; // Import AddTasks co
 import ViewTask from "./Manager/Dashboard/pages/ViewTasks";
 import Employee from "./Manager/Dashboard/pages/Employee";
 import EmployeeProfile from "./Manager/Dashboard/pages/EmployeeProfile";
+import Logs from "./Manager/Dashboard/pages/Logs";
 
 function ErrorBoundary() {
   return (
@@ -75,7 +76,8 @@ function AppRouter() {
         { path: "add-tasks", element: <AddTasks /> },
         { path: "view-task/:id", element: <ViewTask /> },
         { path: "employees", element: <Employee /> },
-        { path: "employees/:id", element: <EmployeeProfile /> }, // Ensure this path is correct
+        { path: "employees/:id", element: <EmployeeProfile /> },
+        { path: "employees/logs/:id", element: <Logs /> }, // Ensure this path is correct
       ],
       errorElement: <ErrorBoundary />,
     },
