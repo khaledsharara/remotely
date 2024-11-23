@@ -6,7 +6,7 @@ interface Submissions {
 
 function SubmissionCard({ Headline, DueDate, instructorName }: Submissions) {
   return (
-    <div className="flex flex-row justify-between py-4  border-black border-b-[1px]">
+    <div className="flex flex-row justify-between py-4 px-4  border-black border-b-[1px]">
       <div>
         <h1 className="text-xl">{Headline}</h1>
         <div className="flex flex-row gap-4"></div>

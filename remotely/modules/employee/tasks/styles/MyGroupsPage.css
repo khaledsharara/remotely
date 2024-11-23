@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.MyGroupsRoot {
+  @apply h-[90%]
+	w-full
+	flex flex-row gap-4;
+}

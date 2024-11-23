@@ -30,7 +30,7 @@ function SubmissionsHeader() {
   return (
     <div className="w-full">
       <div className="flex flex-row justify-normal w-full text-xl self-start border-b-[1px] border-black pb-4">
-        <h1 className="justify-self-start self-end font-l mx-4">Submissions</h1>
+        <h1 className="justify-self-start self-end font-l mx-4">Tasks</h1>
         {/* Searchbar */}
         <div className="justify-self-end relative text-gray-600 w-1/4 mx-4">
           <input
