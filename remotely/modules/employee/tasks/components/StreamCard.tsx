@@ -1,5 +1,6 @@
 import { FaChevronDown } from "react-icons/fa6";
 import profile from "/profile.svg";
+import { useNavigate } from "react-router-dom";
 
 function StreamCard({
   primaryKey,
@@ -32,11 +33,13 @@ function StreamCard({
     const day = date.getDate().toString().padStart(2, "0");
     return `${day}.${month}`;
   };
+  const navigate = useNavigate();
 
   return (
     <div
       key={primaryKey}
       className={`cursor-pointer group w-full rounded-2xl px-8 py-4 transition-all duration-300 ease-in-out h-[20%] min-h-[125px] max-h-[125px] hover:h-[40%] hover:min-h-[250px] hover:max-h-[250px] overflow-clip ${activityClass}`}
+      onClick={() => navigate(`/tasks/${primaryKey}`)}
     >
       <div className="flex flex-row">
         <img src={profile} alt="profile" className="h-20" />
