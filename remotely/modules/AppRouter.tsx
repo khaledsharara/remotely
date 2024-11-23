@@ -11,11 +11,22 @@ import { useSelector } from "react-redux";
 import { selectUser } from "./shared/utils/userSlice";
 import { ProfilePage } from "./employee/profile/App";
 import Dashboard from "./Manager/Dashboard/pages/Dashboard";
-import Task from "./Manager/Dashboard/pages/Task";
+import Tasks from "./Manager/Dashboard/pages/Task";
+import AddTasks from "./Manager/Dashboard/pages/AddTasks"; // Import AddTasks component
+import ViewTask from "./Manager/Dashboard/pages/ViewTasks";
+import Employee from "./Manager/Dashboard/pages/Employee";
+import EmployeeProfile from "./Manager/Dashboard/pages/EmployeeProfile";
+import Logs from "./Manager/Dashboard/pages/Logs";
+
+function ErrorBoundary() {
+  return (
+    <div>Oops! This page does not exist or there was an error loading it.</div>
+  );
+}
 
 function AppRouter() {
   const user = useSelector(selectUser);
-  console.log(user, "user");
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -29,6 +40,7 @@ function AppRouter() {
         ) : (
           <LoginPage />
         ),
+      errorElement: <ErrorBoundary />, // Adding errorElement for a custom error message
     },
     {
       path: "/home",
@@ -38,6 +50,7 @@ function AppRouter() {
           <EmployeeHomePage />
         </ProtectedRoute>
       ),
+      errorElement: <ErrorBoundary />,
     },
     {
       path: "/profile",
@@ -47,9 +60,10 @@ function AppRouter() {
           <ProfilePage />
         </ProtectedRoute>
       ),
+      errorElement: <ErrorBoundary />,
     },
     {
-      path: "/dashboard",
+      path: "dashboard/*",
       element: (
         <ProtectedRoute allowedRoles={["manager"]}>
           <NavBar />
@@ -58,9 +72,14 @@ function AppRouter() {
       ),
       children: [
         { path: "", element: <Navigate to="tasks" replace /> },
-        { path: "tasks", element: <Task /> },
-        { path: "tasks/addTasks", element: <Task /> },
+        { path: "tasks", element: <Tasks /> },
+        { path: "add-tasks", element: <AddTasks /> },
+        { path: "view-task/:id", element: <ViewTask /> },
+        { path: "employees", element: <Employee /> },
+        { path: "employees/:id", element: <EmployeeProfile /> },
+        { path: "employees/logs/:id", element: <Logs /> }, // Ensure this path is correct
       ],
+      errorElement: <ErrorBoundary />,
     },
   ]);
 
