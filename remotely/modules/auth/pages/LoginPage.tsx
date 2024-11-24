@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../shared/utils/userSlice";
 import { userInfo } from "../utils/types";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -13,8 +14,11 @@ function LoginPage() {
 
   const verifyUser = async (): Promise<void> => {
     try {
+      toast.loading("Logging in...");
       const userInfo: userInfo | undefined = await handleLogin(email, password);
       if (userInfo) {
+        toast.dismiss();
+        toast.success("Login successful");
         dispatch(
           login({
             user: userInfo.user,
@@ -25,23 +29,19 @@ function LoginPage() {
         );
         navigate("/home");
       } else {
-        dispatch(
-          login({
-            user: "Khaled",
-            token: "1234",
-            name: "Khaled",
-            role: "employee",
-          })
-        );
-        navigate("/home");
+        toast.dismiss();
+        toast.error("Login failed");
       }
     } catch (error) {
+      toast.dismiss();
+      toast.error("Login failed");
       console.error("Login failed", error);
     }
   };
 
   return (
     <div className="w-full h-screen">
+      <Toaster />
       <div className="bg-gradient-to-l from-primary to-70% w-full h-full flex flex-col gap-2 justify-center items-center">
         <div className="mb-8 text-title text-white">Log In</div>
         <input

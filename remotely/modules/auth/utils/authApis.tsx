@@ -14,7 +14,7 @@ export const getUserInfo = async (token: string) => {
     const userInfo = response.data;
 
     const user = {
-      name: userInfo.data.name,
+      name: userInfo.name,
       role: userInfo.role,
     };
 
