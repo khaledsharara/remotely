@@ -25,9 +25,17 @@ function Employee() {
   return (
     <div className="w-full flex p-5">
       <div className="border-black border-[1px] rounded-[30px] w-full px-[2rem] py-[1rem] my-5">
-        <div className="text-4xl p-5 w-full border-b-[1px] border-black">
-          Employees
+        <div className="flex justify-between w-full border-b-[1px] border-black ">
+          <span className=" text-4xl p-5"> Employees</span>
+
+          <button
+            className=" h-fit self-center bg-blue-500 text-white px-4 py-2 rounded-full"
+            onClick={() => navigate("/dashboard/employees/addEmployee")}
+          >
+            New Employee
+          </button>
         </div>
+
         {employees.slice(0, numToShow).map((employee) => (
           <div
             key={employee.primaryKey}
