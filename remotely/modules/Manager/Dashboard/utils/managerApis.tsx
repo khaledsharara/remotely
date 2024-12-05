@@ -31,9 +31,10 @@ export const createTask = async (task: {
   title: string;
   description: string;
   dueDate: string;
-  employees: string[];
+  uids: string[];
 }) => {
   try {
+    console.log("Task", task);
     const response = await axios.post(
       `${BASE_URL}/api/managers/add-task`,
       task

@@ -7,6 +7,7 @@ import { Dayjs } from "dayjs";
 import { createTask, getAllEmployees } from "../utils/managerApis";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../shared/utils/userSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 function AddTasks() {
   const user = useSelector(selectUser);
@@ -49,19 +50,24 @@ function AddTasks() {
 
   const assignTask = async () => {
     try {
+      toast.loading("Assigning task...");
       await createTask({
         title: taskData.title,
         description: taskData.description,
         dueDate: dueDate?.format("YYYY-MM-DD") || "",
-        employees: selectedEmployees,
+        uids: selectedEmployees,
       });
+      toast.dismiss();
+      toast.success("Task assigned");
     } catch (error) {
       console.error("Failed to create task", error);
+      toast.error("Failed to assign task");
     }
   };
 
   return (
     <div className="w-full flex justify-center">
+      <Toaster />
       <div className="w-4/5">
         <div className="flex mt-10 mb-5 justify-between">
           <span className="text-3xl w-fit">Tasks</span>
