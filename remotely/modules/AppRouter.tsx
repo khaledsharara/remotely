@@ -43,7 +43,7 @@ function AppRouter() {
       errorElement: <ErrorBoundary />, // Adding errorElement for a custom error message
     },
     {
-      path: "/home",
+      path: "/",
       element: (
         <ProtectedRoute allowedRoles={["employee"]}>
           <NavBar />
