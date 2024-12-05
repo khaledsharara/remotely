@@ -1,4 +1,4 @@
-const { db } = require("../firebaseConfig");
+const { db, auth } = require("../firebaseConfig");
 
 const { createUserWithEmailAndPassword } = require("firebase/auth");
 
