@@ -18,6 +18,7 @@ import ViewTask from "./Manager/Dashboard/pages/ViewTasks";
 import Employee from "./Manager/Dashboard/pages/Employee";
 import EmployeeProfile from "./Manager/Dashboard/pages/EmployeeProfile";
 import Logs from "./Manager/Dashboard/pages/Logs";
+import AddEmployee from "./Manager/Dashboard/pages/AddEmployee";
 
 function ErrorBoundary() {
   return (
@@ -96,7 +97,8 @@ function AppRouter() {
         { path: "view-task/:id", element: <ViewTask /> },
         { path: "employees", element: <Employee /> },
         { path: "employees/:id", element: <EmployeeProfile /> },
-        { path: "employees/logs/:id", element: <Logs /> }, // Ensure this path is correct
+        { path: "employees/logs/:id", element: <Logs /> },
+        { path: "employees/addEmployee/", element: <AddEmployee /> }, // Ensure this path is correct
       ],
       errorElement: <ErrorBoundary />,
     },
