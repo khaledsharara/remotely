@@ -23,6 +23,7 @@ function LoginPage() {
         dispatch(
           login({
             user: userInfo.user,
+            email: userInfo.email,
             token: userInfo.token,
             name: userInfo.name,
             role: userInfo.role,

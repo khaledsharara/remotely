@@ -3,14 +3,12 @@ import profile from "../../../../public/profile.svg";
 import "../styles/ProfileCard.css";
 import CalendarCard from "../components/CalendarCard";
 import AltActivityFeed from "../components/AltActivityFeed";
-
-const user = {
-  name: "John Doe",
-  role: "Employee",
-  email: "john@email.com",
-};
+import { selectUser } from "../../../shared/utils/userSlice";
+import { useSelector } from "react-redux";
 
 function HomePage() {
+  const user = useSelector(selectUser);
+
   return (
     <div className="w-full h-screen">
       <div className="px-8 py-4">
