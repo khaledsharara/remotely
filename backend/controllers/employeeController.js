@@ -65,3 +65,23 @@ exports.getEmployee = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+exports.getAllEmployees = async (req, res) => {
+  try {
+    const employeesRef = db.ref("employees");
+    let employees = [];
+
+    await employeesRef.once("value", (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        employees.push(childSnapshot.val());
+      });
+    });
+
+    return res.status(200).json({
+      message: "Employees found",
+      data: employees,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
