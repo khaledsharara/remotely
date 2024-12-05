@@ -5,7 +5,7 @@ const {
   getMyEmployees,
 } = require("../controllers/managerController");
 
-router.post("/:id/add-task", addTask);
+router.post("/add-task", addTask);
 router.post("/create", createManager);
 router.get("/employees", getMyEmployees);
 
