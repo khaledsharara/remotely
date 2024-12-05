@@ -2,8 +2,14 @@ const { db } = require("../firebaseConfig");
 
 exports.addTask = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { title, description, dueDate } = req.body;
+    const { uids, title, description, dueDate } = req.body;
+
+    // Validate the inputs
+    if (!uids || !Array.isArray(uids) || uids.length === 0) {
+      return res
+        .status(400)
+        .json({ error: "A valid array of UIDs is required." });
+    }
 
     if (!title || !description || !dueDate) {
       return res.status(400).json({ error: "All fields are required." });
@@ -16,14 +22,21 @@ exports.addTask = async (req, res) => {
       completed: false,
     };
 
-    const tasksRef = db.ref(`employees/${id}/tasks`);
-    await tasksRef.push(newTask);
+    // Iterate over UIDs and assign the task to each
+    const taskPromises = uids.map(async (uid) => {
+      const tasksRef = db.ref(`employees/${uid}/tasks`);
+      await tasksRef.push(newTask);
+    });
+
+    // Wait for all tasks to be assigned
+    await Promise.all(taskPromises);
 
     return res.status(200).json({
-      message: "Task added successfully",
+      message: "Task added successfully to all specified employees",
       data: newTask,
     });
   } catch (error) {
+    console.error("Error adding task:", error);
     return res.status(500).json({ error: error.message });
   }
 };
