@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { createEmployee } from "../utils/managerApis";
 import toast, { Toaster } from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../shared/utils/userSlice";
 
 function addEmployee() {
+  const user = useSelector(selectUser);
   const [employee, setEmployee] = useState<{
     name: string;
     email: string;
@@ -18,7 +21,7 @@ function addEmployee() {
   const handleCreateEmployee = async () => {
     try {
       toast.loading("Creating employee...");
-      const createdEmployee = await createEmployee(employee);
+      await createEmployee(employee, user.user || "");
       toast.dismiss();
       toast.success("Employee created");
     } catch (error) {

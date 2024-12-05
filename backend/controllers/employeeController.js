@@ -4,12 +4,25 @@ const { createUserWithEmailAndPassword } = require("firebase/auth");
 
 exports.createEmployee = async (req, res) => {
   try {
-    const { email, password, name, role } = req.body;
+    const { email, password, name, role, managerUid } = req.body;
 
-    if (!email || !password || !name || !role) {
+    console.log("req.body", req.body);
+    if (!email || !password || !name || !role || !managerUid) {
       return res.status(400).json({ error: "All fields are required." });
     }
 
+    // Fetch the manager's details
+    const managerRef = db.ref(`managers/${managerUid}`);
+    const managerSnapshot = await managerRef.once("value");
+
+    console.log("managerSnapshot", managerSnapshot.val());
+    if (!managerSnapshot.exists()) {
+      return res.status(404).json({ error: "Manager not found." });
+    }
+
+    const managerData = managerSnapshot.val();
+
+    // Create the new employee
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -22,18 +35,36 @@ exports.createEmployee = async (req, res) => {
       name,
       email,
       role,
+      createdBy: {
+        managerUid: managerUid,
+        managerName: managerData.name,
+      },
     };
 
+    // Add the new employee to the database
     const employeeRef = db.ref("employees").child(uid);
     await employeeRef.set(newEmployee);
 
+    // Add the employee's uid to the manager's employees list
+    const managerEmployeesRef = managerRef.child("employees");
+    const currentEmployees =
+      (await managerEmployeesRef.once("value")).val() || [];
+    const updatedEmployees = [...currentEmployees, uid];
+
+    await managerEmployeesRef.set(updatedEmployees);
+
     return res.status(200).json({
-      message: "Employee created successfully",
+      message:
+        "Employee created successfully and added to manager's employees list.",
       data: {
         uid,
         name,
         email,
         role,
+        createdBy: {
+          managerUid,
+          managerName: managerData.name,
+        },
       },
     });
   } catch (error) {
