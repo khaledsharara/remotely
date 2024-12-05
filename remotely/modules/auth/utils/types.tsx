@@ -3,4 +3,6 @@ export type userInfo = {
   token: string;
   name: string;
   role: string;
+  employeeRole?: string;
+  email: string;
 };

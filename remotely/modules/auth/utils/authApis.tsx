@@ -18,6 +18,7 @@ export const getUserInfo = async (token: string) => {
       role: userInfo.role,
       email: userInfo.data.email,
       uid: userInfo.data.uid,
+      employeeRole: userInfo.data.role,
     };
 
     return user;
@@ -57,6 +58,8 @@ export const handleLogin = async (email: string, password: string) => {
       token,
       name: userInfo?.name,
       role: userInfo?.role,
+      email: userInfo?.email,
+      employeeRole: userInfo?.employeeRole,
     };
     return user as userInfo;
   } catch (error) {

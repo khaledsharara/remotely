@@ -5,6 +5,7 @@ interface UserState {
   token: string | null;
   name: string | null;
   role: string | null;
+  employeeRole?: string | null;
 }
 
 // Load user data from local storage
@@ -17,6 +18,7 @@ const loadUserFromLocalStorage = (): UserState => {
         token: null,
         name: null,
         role: null,
+        employeeRole: null,
       };
 };
 
@@ -33,12 +35,14 @@ const userSlice = createSlice({
         token: string;
         name: string;
         role: string;
+        employeeRole?: string;
       }>
     ) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.name = action.payload.name;
       state.role = action.payload.role;
+      state.employeeRole = action.payload.employeeRole;
 
       // Save user data to local storage
       localStorage.setItem("user", JSON.stringify(state));
@@ -48,6 +52,7 @@ const userSlice = createSlice({
       state.token = null;
       state.name = null;
       state.role = null;
+      state.employeeRole = null;
 
       // Clear user data from local storage
       localStorage.removeItem("user");

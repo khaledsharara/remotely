@@ -26,6 +26,7 @@ function LoginPage() {
             token: userInfo.token,
             name: userInfo.name,
             role: userInfo.role,
+            employeeRole: userInfo.employeeRole,
           })
         );
         navigate("/home");
