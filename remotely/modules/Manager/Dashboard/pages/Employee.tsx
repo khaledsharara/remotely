@@ -1,19 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-
-const employees = [
-  { primaryKey: "1", name: "Ada Lovelace" },
-  { primaryKey: "2", name: "Alan Turing" },
-  { primaryKey: "3", name: "Grace Hopper" },
-  { primaryKey: "4", name: "Tim Berners-Lee" },
-  { primaryKey: "5", name: "Linus Torvalds" },
-  { primaryKey: "6", name: "Marie Curie" },
-  { primaryKey: "7", name: "Albert Einstein" },
-  { primaryKey: "8", name: "Stephen Hawking" },
-  { primaryKey: "9", name: "Carl Sagan" },
-  { primaryKey: "10", name: "Katherine Johnson" },
-];
+import { getAllEmployees } from "../utils/managerApis";
 
 function Employee() {
   const [numToShow, setNumToShow] = useState(5);
@@ -21,6 +9,24 @@ function Employee() {
   const handleCardClick = (primaryKey: string) => {
     navigate(`/dashboard/employees/${primaryKey}`);
   };
+  const [employees, setEmployees] = useState<
+    { email: string; name: string; role: string; uid: string }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await getAllEmployees();
+        if (response) {
+          setEmployees(response.data);
+          console.log("Employees", response.data);
+        }
+      } catch (error) {
+        console.error("Failed to get employees", error);
+      }
+    };
+    fetchEmployees();
+  }, []);
 
   return (
     <div className="w-full flex p-5">
@@ -38,9 +44,9 @@ function Employee() {
 
         {employees.slice(0, numToShow).map((employee) => (
           <div
-            key={employee.primaryKey}
+            key={employee.uid}
             className="flex flex-row justify-between py-5 cursor-pointer"
-            onClick={() => handleCardClick(employee.primaryKey)}
+            onClick={() => handleCardClick(employee.uid)}
           >
             <div className="flex flex-row items-center">
               <img className="h-16" />

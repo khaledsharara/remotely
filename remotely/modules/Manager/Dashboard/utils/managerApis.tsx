@@ -19,3 +19,13 @@ export const createEmployee = async (employee: {
     console.error("Failed to create employee", error);
   }
 };
+
+export const getAllEmployees = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/employees`);
+    const employees = response.data;
+    return employees;
+  } catch (error) {
+    console.error("Failed to get employees", error);
+  }
+};
