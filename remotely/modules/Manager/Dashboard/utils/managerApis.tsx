@@ -27,6 +27,24 @@ export const createEmployee = async (
   }
 };
 
+export const createTask = async (task: {
+  title: string;
+  description: string;
+  dueDate: string;
+  employees: string[];
+}) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/api/managers/add-task`,
+      task
+    );
+    const createdTask = response.data;
+    return createdTask;
+  } catch (error) {
+    console.error("Failed to create employee", error);
+  }
+};
+
 export const getAllEmployees = async (uid: string) => {
   try {
     const response = await axios.get(`${BASE_URL}/api/managers/employees`, {

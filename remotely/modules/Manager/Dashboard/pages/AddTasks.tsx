@@ -4,7 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { Dayjs } from "dayjs";
 
-import { getAllEmployees } from "../utils/managerApis";
+import { createTask, getAllEmployees } from "../utils/managerApis";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../shared/utils/userSlice";
 
@@ -47,14 +47,17 @@ function AddTasks() {
     fetchEmployees();
   }, []);
 
-  const assignTask = () => {
-    console.log("Task Data:", taskData);
-    console.log("Selected Employees:", selectedEmployees);
-    console.log(
-      "Due Date:",
-      dueDate ? dueDate.format("YYYY-MM-DD") : "No date selected"
-    );
-    // Handle task assignment logic here
+  const assignTask = async () => {
+    try {
+      await createTask({
+        title: taskData.title,
+        description: taskData.description,
+        dueDate: dueDate?.format("YYYY-MM-DD") || "",
+        employees: selectedEmployees,
+      });
+    } catch (error) {
+      console.error("Failed to create task", error);
+    }
   };
 
   return (
