@@ -19,6 +19,7 @@ function LoginPage() {
       if (userInfo) {
         toast.dismiss();
         toast.success("Login successful");
+        console.log("User info", userInfo);
         dispatch(
           login({
             user: userInfo.user,

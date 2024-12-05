@@ -14,8 +14,10 @@ export const getUserInfo = async (token: string) => {
     const userInfo = response.data;
 
     const user = {
-      name: userInfo.name,
+      name: userInfo.data.name,
       role: userInfo.role,
+      email: userInfo.data.email,
+      uid: userInfo.data.uid,
     };
 
     return user;
