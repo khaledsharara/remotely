@@ -27,9 +27,13 @@ export const createEmployee = async (
   }
 };
 
-export const getAllEmployees = async () => {
+export const getAllEmployees = async (uid: string) => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/employees`);
+    const response = await axios.get(`${BASE_URL}/api/managers/employees`, {
+      params: {
+        managerUid: uid,
+      },
+    });
     const employees = response.data;
     return employees;
   } catch (error) {

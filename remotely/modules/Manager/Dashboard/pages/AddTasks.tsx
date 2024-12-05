@@ -5,8 +5,11 @@ import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { Dayjs } from "dayjs";
 
 import { getAllEmployees } from "../utils/managerApis";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../shared/utils/userSlice";
 
 function AddTasks() {
+  const user = useSelector(selectUser);
   const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
   const [taskData, setTaskData] = useState<{
     title: string;
@@ -32,7 +35,7 @@ function AddTasks() {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await getAllEmployees();
+        const response = await getAllEmployees(user.user || "");
         if (response) {
           setEmployees(response.data);
           console.log("Employees", response.data);

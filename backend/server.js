@@ -8,6 +8,7 @@ const verifyToken = require("./middleware/authMiddleware");
 
 const employeeRoutes = require("./routes/employeeRoutes");
 const authRoutes = require("./routes/authRoutes");
+const managerRoutes = require("./routes/managerRoutes");
 
 const app = express();
 app.use(cors());
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 
 app.use("/api/employees", employeeRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/managers", managerRoutes);
 
 const PORT = process.env.PORT || 5000;
 const server = http.createServer(app);

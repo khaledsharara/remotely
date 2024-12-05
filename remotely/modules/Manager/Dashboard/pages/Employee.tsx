@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { getAllEmployees } from "../utils/managerApis";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../shared/utils/userSlice";
 
 function Employee() {
+  const user = useSelector(selectUser);
   const [numToShow, setNumToShow] = useState(5);
   const navigate = useNavigate();
   const handleCardClick = (primaryKey: string) => {
@@ -16,7 +19,7 @@ function Employee() {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await getAllEmployees();
+        const response = await getAllEmployees(user.user || "");
         if (response) {
           setEmployees(response.data);
           console.log("Employees", response.data);
