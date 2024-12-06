@@ -29,7 +29,7 @@ function ViewTaskStreamCard({
     <div className="flex flex-col items-center w-full ">
       <div
         key={primaryKey}
-        className={`group  rounded-2xl px-8 py-4   h-[250px] w-full   ${activityClass}`}
+        className={`group  rounded-2xl px-8 py-4   h-[200px] w-full   ${activityClass}`}
       >
         <div className="flex flex-row">
           <div className=" ml-4 w-full">
@@ -50,14 +50,6 @@ function ViewTaskStreamCard({
                 <span className="text-[12px] font-normal line-clamp-3 text-slate-700">
                   {description}
                 </span>
-              </div>
-            </div>
-            <div className="flex flex-row">
-              <div className="flex mt-20 bg-slate-200   w-[15%] rounded-lg h-7 justify-center items-center space-x-2">
-                <div className="flex text-red-600">
-                  <FaFilePdf />
-                </div>
-                <span className="text-[11px] text-slate-800">{pdf}</span>
               </div>
             </div>
           </div>
