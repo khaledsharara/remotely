@@ -1,8 +1,12 @@
+import { useState } from "react";
 import EmployeeStreamCard from "../components/EmployeeStreamCard";
 import { useNavigate } from "react-router-dom";
 
 function Tasks() {
   const navigate = useNavigate();
+
+  // State for the search bar
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fillerData = [
     {
@@ -62,17 +66,26 @@ function Tasks() {
     },
   ];
 
+  // Filter data based on the search query
+  const filteredData = fillerData.filter((data) =>
+    `${data.headline} ${data.subheadline} ${data.description} ${data.instructorName}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="flex flex-col items-center w-full p-4">
       {/* Row for Search Bar and Add Task button */}
-      <div className="flex justify-between items-center w-full max-w-xs mb-4 ">
+      <div className="flex justify-between items-center w-full max-w-xs mb-4">
         {/* Search Bar */}
-        <div className="relative flex-1 ">
-          <div className="flex items-center border border-black rounded-full overflow-hidden ">
+        <div className="relative flex-1">
+          <div className="flex items-center border border-black rounded-full overflow-hidden">
             <input
               type="text"
               placeholder="Search..."
               className="px-4 py-2 w-full outline-none text-black bg-inherit placeholder-gray-600"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <button className="text-black px-7 py-2 flex items-center">
               <svg
@@ -104,8 +117,9 @@ function Tasks() {
 
       {/* EmployeeStreamCard below the search bar and Add Task button */}
       <div className="flex flex-col space-y-4">
-        {fillerData.map((data) => (
+        {filteredData.map((data) => (
           <EmployeeStreamCard
+            key={data.primaryKey}
             activityType={data.activityType}
             primaryKey={data.primaryKey}
             instructorName={data.instructorName}
