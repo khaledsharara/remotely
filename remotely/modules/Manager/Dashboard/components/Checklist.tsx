@@ -77,7 +77,7 @@ const Checklist: React.FC = () => {
               {/* Delete button (inside the same container, appears on hover) */}
               <button
                 onClick={() => deleteItem(index)}
-                className="ml-4 text-gray-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="ml-4 text-gray-600 hover:text-red-500 transition-opacity duration-300"
               >
                 <DeleteOutlined className="text-xl" />
               </button>
