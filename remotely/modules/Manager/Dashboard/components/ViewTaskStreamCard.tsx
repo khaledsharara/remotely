@@ -26,10 +26,10 @@ function ViewTaskStreamCard({
 
   return (
     // Parent container with flex properties to center the content
-    <div className="flex flex-col items-center  ">
+    <div className="flex flex-col items-center w-full ">
       <div
         key={primaryKey}
-        className={`ml-[25%] group  rounded-2xl px-8 py-4   h-[250px] w-full   ${activityClass}`}
+        className={`group  rounded-2xl px-8 py-4   h-[250px] w-full   ${activityClass}`}
       >
         <div className="flex flex-row">
           <div className=" ml-4 w-full">

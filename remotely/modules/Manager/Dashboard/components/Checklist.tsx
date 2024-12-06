@@ -46,7 +46,7 @@ const Checklist: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-[850px]">
+    <div className="flex flex-col w-full">
       {/* Checklist header */}
       <div className="flex self-start text-4xl py-4">
         <span>Checklist</span>
