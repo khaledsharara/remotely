@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import Checklist from "../../../Manager/Dashboard/components/Checklist";
 
 const data = [
   {
@@ -160,54 +161,7 @@ function TaskPage() {
       </div>
       {/* Checklist */}
       <div className="w-full">
-        <div className="text-4xl w-full border-b-black py-4 border-b-[2px]">
-          Checklist
-        </div>
-        <div>
-          <div className="text-3xl pt-5 pb-10 flex flex-row border-b-black py-4 border-b-[2px]">
-            <div>Activity Title</div>
-            <div className="ml-auto self-center">
-              <button className="">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1}
-                  stroke="#287AFF"
-                  className="size-16"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div className="text-3xl pt-5 pb-10 flex flex-row border-b-black py-4 border-b-[2px]">
-            <div>Activity Title</div>
-            <div className="ml-auto self-center">
-              <button className="p-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 -2 23 27"
-                  strokeWidth={1}
-                  stroke="#287AFF"
-                  className="size-14"
-                >
-                  <path d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm7 7.457l-9.005 9.565-4.995-5.865.761-.649 4.271 5.016 8.24-8.752.728.685z" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-end text-[20px] mt-5">
-          <div className="bg-[#287AFF] text-white px-3 py-2 rounded-full">
-            + Add Item
-          </div>
-        </div>
+        <Checklist />
       </div>
     </div>
   );
