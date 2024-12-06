@@ -123,3 +123,75 @@ exports.getMyEmployees = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+// i want to add a checklist to the task each checklist item will have a title and a status
+exports.addChecklistItem = async (req, res) => {
+  try {
+    const { uid, taskId, title } = req.body;
+
+    if (!uid || !taskId || !title) {
+      return res.status(400).json({ error: "All fields are required." });
+    }
+
+    const taskRef = db.ref(`employees/${uid}/tasks/${taskId}`);
+    const taskSnapshot = await taskRef.once("value");
+
+    if (!taskSnapshot.exists()) {
+      return res.status(404).json({ error: "Task not found." });
+    }
+
+    const taskData = taskSnapshot.val();
+    const checklist = taskData.checklist || [];
+
+    const newChecklistItem = {
+      title,
+      status: false,
+    };
+
+    checklist.push(newChecklistItem);
+
+    await taskRef.update({ checklist });
+
+    return res.status(200).json({
+      message: "Checklist item added successfully",
+      data: newChecklistItem,
+    });
+  } catch (error) {
+    console.error("Error adding checklist item:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+// i want to fetch a task by only its id without employee id
+exports.getTaskById = async (req, res) => {
+  try {
+    const { taskId } = req.query;
+
+    if (!taskId) {
+      return res.status(400).json({ error: "Task ID is required." });
+    }
+
+    const employeesRef = db.ref("employees");
+    const employeesSnapshot = await employeesRef.once("value");
+
+    let taskData = null;
+    employeesSnapshot.forEach((employeeSnapshot) => {
+      const tasks = employeeSnapshot.val().tasks || {};
+      const task = Object.values(tasks).find((t) => t.id === taskId);
+      if (task) {
+        taskData = task;
+      }
+    });
+
+    if (!taskData) {
+      return res.status(404).json({ error: "Task not found." });
+    }
+
+    return res.status(200).json({
+      message: "Task found",
+      data: taskData,
+    });
+  } catch (error) {
+    console.error("Error fetching task:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
