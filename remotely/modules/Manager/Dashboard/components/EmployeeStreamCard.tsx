@@ -2,24 +2,26 @@ import { useNavigate } from "react-router-dom";
 
 //constant values
 function EmployeeStreamCard({
-  primaryKey = "1",
-  activityType = "Homework",
-  instructorName = "Instructor Name",
-  headline = "Sample Headline",
-  subheadline = "Sample Subheadline",
-  description = "This is a sample description of the activity. It provides an overview of the task details.",
-  dueDate = "2024-10-31T00:00:00Z",
-  attachments = [],
+  primaryKey,
+  instructorName,
+  headline,
+  description,
+  dueDate,
+  completed,
+  attachments,
+}: {
+  primaryKey: string;
+  instructorName: string;
+  headline: string;
+  description: string;
+  dueDate: string;
+  completed: boolean;
+  attachments: string[];
 }) {
   //constant values
-  const activityClass =
-    {
-      homework: "bg-gradient-to-r from-card-from to-card-homework",
-      quiz: "bg-gradient-to-r from-card-from to-card-quiz",
-      material: "bg-gradient-to-r from-card-from to-card-material",
-      announcement: "bg-gradient-to-r from-card-from to-card-announcement",
-      "": "bg-gradient-to-r from-card-from to-card-homework",
-    }[activityType.toLowerCase()] || "";
+  const activityClass = completed
+    ? "bg-gradient-to-r from-card-from to-card-material"
+    : "bg-gradient-to-r from-card-from to-card-homework";
   {
     /*formatting the string date*/
   }
@@ -61,13 +63,12 @@ function EmployeeStreamCard({
           <div className=" flex flex-row justify-between border-b-[1px] border-black pb-2">
             <span>{instructorName}</span>
             <span className="bg-black text-base h-fit opacity-50 text-white rounded-full px-4 items-center">
-              {activityType}
+              {completed ? "Done" : "To-Do"}
             </span>
           </div>
           <div className="flex flex-row justify-between">
             <div className="flex flex-col">
               <span className="text-lg font-bold">{headline}</span>
-              <span className="text-sm font-normal">{subheadline}</span>
             </div>
             <div className="self-center transition-all duration-300 ease-in-out mr-5">
               ▼
