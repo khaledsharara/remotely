@@ -60,6 +60,11 @@ function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              verifyUser();
+            }
+          }}
         />
 
         <button

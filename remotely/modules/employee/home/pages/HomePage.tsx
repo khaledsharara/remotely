@@ -19,7 +19,9 @@ function HomePage() {
               <div className="profile-card-body-header">{user.name}</div>
               {/* content */}
               <div className="profile-card-body-content">
-                <div className="profile-card-body-type">Student</div>
+                <div className="profile-card-body-type">
+                  {user.employeeRole}
+                </div>
                 {user.email ? (
                   <div className=".profile-card-body-email">
                     <div className="profile-card-body-email-text">
