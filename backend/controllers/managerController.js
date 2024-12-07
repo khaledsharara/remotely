@@ -224,9 +224,11 @@ exports.getMyEmployeesTasks = async (req, res) => {
     employeesSnapshot.forEach((childSnapshot) => {
       const employeeData = childSnapshot.val();
       if (employeeUids.includes(employeeData.uid)) {
-        const employeeTasks = Object.values(employeeData.tasks || {});
-        employeeTasks.forEach((task) => {
+        const employeeTasks = employeeData.tasks || {};
+        Object.keys(employeeTasks).forEach((taskId) => {
+          const task = employeeTasks[taskId];
           tasks.push({
+            taskId,
             ...task,
             employeeName: employeeData.name,
           });

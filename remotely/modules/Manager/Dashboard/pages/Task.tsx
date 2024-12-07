@@ -1,12 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EmployeeStreamCard from "../components/EmployeeStreamCard";
 import { useNavigate } from "react-router-dom";
+import { getAllEmployeeTasks } from "../utils/managerApis";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../shared/utils/userSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 function Tasks() {
   const navigate = useNavigate();
-
-  // State for the search bar
+  const user = useSelector(selectUser);
   const [searchQuery, setSearchQuery] = useState("");
+  const [tasks, setTasks] = useState<
+    {
+      taskId: string;
+      completed: boolean;
+      description: string;
+      dueDate: string;
+      title: string;
+      employeeName: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await getAllEmployeeTasks(user.user || "");
+        setTasks(response.data);
+        console.log("Tasks", response.data);
+      } catch (error) {
+        toast.error("Failed to fetch tasks");
+      }
+    };
+    fetchTasks();
+  }, []);
 
   const fillerData = [
     {
@@ -75,6 +101,7 @@ function Tasks() {
 
   return (
     <div className="flex flex-col items-center w-full p-4">
+      <Toaster />
       {/* Row for Search Bar and Add Task button */}
       <div className="flex justify-between items-center w-full max-w-xs mb-4">
         {/* Search Bar */}
@@ -116,18 +143,18 @@ function Tasks() {
       </div>
 
       {/* EmployeeStreamCard below the search bar and Add Task button */}
-      <div className="flex flex-col space-y-4">
-        {filteredData.map((data) => (
+      <div className="flex flex-col space-y-4 w-full">
+        {tasks.map((data) => (
           <EmployeeStreamCard
-            key={data.primaryKey}
-            activityType={data.activityType}
-            primaryKey={data.primaryKey}
-            instructorName={data.instructorName}
-            attachments={data.attachments}
+            key={data.taskId}
+            activityType={""}
+            primaryKey={data.taskId}
+            instructorName={data.employeeName}
+            attachments={[]}
             description={data.description}
             dueDate={data.dueDate}
-            headline={data.headline}
-            subheadline={data.subheadline}
+            headline={data.title}
+            subheadline={""}
           />
         ))}
       </div>

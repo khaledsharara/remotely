@@ -59,3 +59,17 @@ export const getAllEmployees = async (uid: string) => {
     console.error("Failed to get employees", error);
   }
 };
+
+export const getAllEmployeeTasks = async (managerUid: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/managers/tasks`, {
+      params: {
+        managerUid,
+      },
+    });
+    const tasks = response.data;
+    return tasks;
+  } catch (error) {
+    console.error("Failed to get tasks", error);
+  }
+};
