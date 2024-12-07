@@ -8,9 +8,12 @@ import { createTask, getAllEmployees } from "../utils/managerApis";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../shared/utils/userSlice";
 import toast, { Toaster } from "react-hot-toast";
+import Checklist from "../components/Checklist";
+import { ChecklistItem } from "../utils/types";
 
 function AddTasks() {
   const user = useSelector(selectUser);
+  const [checklistItems, setChecklistItems] = useState<ChecklistItem[]>([]);
   const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
   const [taskData, setTaskData] = useState<{
     title: string;
@@ -70,7 +73,7 @@ function AddTasks() {
       <Toaster />
       <div className="w-4/5">
         <div className="flex mt-10 mb-5 justify-between">
-          <span className="text-3xl w-fit">Tasks</span>
+          <span className="text-3xl w-fit">New Task</span>
           <button
             className="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 transition-colors duration-300"
             onClick={assignTask}
@@ -78,7 +81,7 @@ function AddTasks() {
             Assign
           </button>
         </div>
-        <div className="flex-col w-full h-[20%] rounded-3xl bg-[#D3D2D1] mb-10">
+        <div className="flex-col w-full h-fit rounded-3xl bg-[#D3D2D1] mb-10">
           <div className="flex flex-col justify-between p-5 h-full">
             <div className="flex mb-4">
               <input
@@ -132,6 +135,7 @@ function AddTasks() {
             </div>
           </div>
         </div>
+        <Checklist items={checklistItems} setItems={setChecklistItems} />
       </div>
     </div>
   );

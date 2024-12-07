@@ -54,12 +54,6 @@ function NavBar() {
         >
           <a href="/dashboard">Dashboard</a>
         </div>
-
-        <div
-          className={`NavButton ${currentTab === "profile" && "text-primary"}`}
-        >
-          <a href="/profile">Profile</a>
-        </div>
       </div>
       <button
         className="justify-self-end mr-4 bg-primary w-fit h-fit self-center text-white rounded px-4 py-2 active:bg-primary-dark"

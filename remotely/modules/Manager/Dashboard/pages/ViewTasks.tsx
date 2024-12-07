@@ -5,10 +5,12 @@ import ViewTaskStreamCard from "../components/ViewTaskStreamCard";
 import { getTaskById } from "../utils/managerApis";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { ChecklistItem } from "../utils/types";
 
 //constant values
 function ViewTask() {
   const { id } = useParams();
+  const [checklistItems, setChecklistItems] = useState<ChecklistItem[]>([]);
   const [task, setTask] = useState<{
     id: string;
     completed: boolean;
@@ -56,7 +58,7 @@ function ViewTask() {
           completed={task?.completed || false}
         />
         <div className="flex mt-10 w-full">
-          <Checklist />
+          <Checklist items={checklistItems} setItems={setChecklistItems} />
         </div>
       </div>
     </div>

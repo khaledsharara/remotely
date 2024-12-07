@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
 import Checklist from "../../../Manager/Dashboard/components/Checklist";
+import { useState } from "react";
+import { ChecklistItem } from "../../../Manager/Dashboard/utils/types";
 
 const data = [
   {
@@ -118,6 +120,7 @@ function TaskPage() {
   const { id } = useParams();
   const activity = data.find((item) => item.primaryKey === id);
   const activityType = activity?.activityType;
+  const [checklistItems, setChecklistItems] = useState<ChecklistItem[]>([]);
   const activityClass: { [key: string]: string } | string =
     {
       done: "bg-gradient-to-r from-card-from to-card-homework",
@@ -161,7 +164,7 @@ function TaskPage() {
       </div>
       {/* Checklist */}
       <div className="w-full">
-        <Checklist />
+        <Checklist items={checklistItems} setItems={setChecklistItems} />
       </div>
     </div>
   );

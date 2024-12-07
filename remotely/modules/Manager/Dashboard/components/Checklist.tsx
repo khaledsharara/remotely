@@ -5,38 +5,38 @@ import {
   PlusOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
+import { ChecklistItem } from "../utils/types";
 
-type ChecklistItem = {
-  text: string;
-  status: boolean; // true for checked, false for crossed
-};
+interface ChecklistProps {
+  items: ChecklistItem[];
+  setItems: React.Dispatch<React.SetStateAction<ChecklistItem[]>>;
+}
 
-const Checklist: React.FC = () => {
-  const [items, setItems] = useState<ChecklistItem[]>([
-    { text: "Activity 1", status: true },
-    { text: "Activity 2", status: false },
-  ]);
+const Checklist: React.FC<ChecklistProps> = ({ items, setItems }) => {
   const [newItem, setNewItem] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const addItem = () => {
     if (newItem.trim()) {
-      setItems([...items, { text: newItem, status: false }]);
+      setItems([
+        ...items,
+        { id: Date.now(), text: newItem, status: false }, // Generate a unique id
+      ]);
       setNewItem("");
       setIsModalOpen(false);
     }
   };
 
-  const toggleStatus = (index: number) => {
+  const toggleStatus = (id: number) => {
     setItems((prevItems) =>
-      prevItems.map((item, i) =>
-        i === index ? { ...item, status: !item.status } : item
+      prevItems.map((item) =>
+        item.id === id ? { ...item, status: !item.status } : item
       )
     );
   };
 
-  const deleteItem = (index: number) => {
-    setItems((prevItems) => prevItems.filter((_, i) => i !== index));
+  const deleteItem = (id: number) => {
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -52,9 +52,9 @@ const Checklist: React.FC = () => {
         <span>Checklist</span>
       </div>
 
-      {items.map((item, index) => (
+      {items.map((item) => (
         <div
-          key={index}
+          key={item.id}
           className="flex flex-row py-5 px-4 items-center justify-between border-b-[1px] border-black"
         >
           <div className="text-2xl">
@@ -65,7 +65,7 @@ const Checklist: React.FC = () => {
             <div className="flex items-center group relative">
               {/* Toggle status button */}
               <button
-                onClick={() => toggleStatus(index)}
+                onClick={() => toggleStatus(item.id)}
                 className="flex items-center"
               >
                 {item.status ? (
@@ -74,9 +74,9 @@ const Checklist: React.FC = () => {
                   <CloseCircleOutlined className="text-3xl text-red-500" />
                 )}
               </button>
-              {/* Delete button (inside the same container, appears on hover) */}
+              {/* Delete button */}
               <button
-                onClick={() => deleteItem(index)}
+                onClick={() => deleteItem(item.id)}
                 className="ml-4 text-gray-600 hover:text-red-500 transition-opacity duration-300"
               >
                 <DeleteOutlined className="text-xl" />
