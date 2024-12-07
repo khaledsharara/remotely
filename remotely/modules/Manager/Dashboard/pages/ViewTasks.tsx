@@ -26,7 +26,7 @@ function ViewTask() {
         const response = await getTaskById(id || "");
         if (response) {
           setTask(response);
-          setChecklistItems(response.checklist);
+          setChecklistItems(response.checklist || []);
           console.log("Task", response);
         } else {
           toast.error("Failed to fetch task");
@@ -43,7 +43,7 @@ function ViewTask() {
   useEffect(() => {
     const updateTaskChecklist = async () => {
       try {
-        await updateChecklist(id || "", checklistItems);
+        await updateChecklist(id || "", checklistItems || []);
       } catch (error) {
         toast.error("Failed to update checklist");
         console.error("Failed to update checklist", error);
