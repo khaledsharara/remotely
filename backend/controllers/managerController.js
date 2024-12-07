@@ -123,7 +123,7 @@ exports.getMyEmployees = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-// i want to add a checklist to the task each checklist item will have a title and a status
+
 exports.addChecklistItem = async (req, res) => {
   try {
     const { uid, taskId, title } = req.body;
@@ -161,7 +161,6 @@ exports.addChecklistItem = async (req, res) => {
   }
 };
 
-// i want to fetch a task by only its id without employee id
 exports.getTaskById = async (req, res) => {
   try {
     const { taskId } = req.query;
@@ -192,6 +191,55 @@ exports.getTaskById = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching task:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getMyEmployeesTasks = async (req, res) => {
+  try {
+    const { managerUid } = req.query;
+
+    if (!managerUid) {
+      return res.status(400).json({ error: "Manager UID is required." });
+    }
+
+    const managerRef = db.ref(`managers/${managerUid}`);
+    const managerSnapshot = await managerRef.once("value");
+
+    if (!managerSnapshot.exists()) {
+      return res.status(404).json({ error: "Manager not found." });
+    }
+
+    const managerData = managerSnapshot.val();
+    const employeeUids = managerData.employees || [];
+
+    if (employeeUids.length === 0) {
+      return res.status(200).json({ message: "No employees found", data: [] });
+    }
+
+    const employeesRef = db.ref("employees");
+    const employeesSnapshot = await employeesRef.once("value");
+
+    const tasks = [];
+    employeesSnapshot.forEach((childSnapshot) => {
+      const employeeData = childSnapshot.val();
+      if (employeeUids.includes(employeeData.uid)) {
+        const employeeTasks = Object.values(employeeData.tasks || {});
+        employeeTasks.forEach((task) => {
+          tasks.push({
+            ...task,
+            employeeName: employeeData.name,
+          });
+        });
+      }
+    });
+
+    return res.status(200).json({
+      message: "Tasks found",
+      data: tasks,
+    });
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
     return res.status(500).json({ error: error.message });
   }
 };
