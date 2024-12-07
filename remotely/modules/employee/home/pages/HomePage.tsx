@@ -2,7 +2,6 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import profile from "../../../../public/profile.svg";
 import "../styles/ProfileCard.css";
 import CalendarCard from "../components/CalendarCard";
-import AltActivityFeed from "../components/AltActivityFeed";
 import { selectUser } from "../../../shared/utils/userSlice";
 import { useSelector } from "react-redux";
 
@@ -51,9 +50,6 @@ function HomePage() {
           </div>
           <div className="mt-5">
             <CalendarCard />
-          </div>
-          <div className="mt-5 mx-5">
-            <AltActivityFeed />
           </div>
         </div>
       </div>

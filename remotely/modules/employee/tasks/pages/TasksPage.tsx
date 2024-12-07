@@ -1,37 +1,41 @@
-import StreamCard from "../components/StreamCard";
+import { useEffect, useState } from "react";
 import "../styles/MyGroupsPage.css";
+import EmployeeStreamCard from "../../../Manager/Dashboard/components/EmployeeStreamCard";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../shared/utils/userSlice";
+import { getAllTask } from "../utils/tasksApis";
+import { Toaster } from "react-hot-toast";
 
 export default function TasksPage() {
-  // Hardcoded data for assignments
-  const assignments = [
-    {
-      primaryKey: "1",
-      activityType: "Done",
-      instructorName: "John Doe",
-      headline: "Math Assignment 1",
-      subheadline: "Algebra Basics",
-      description: "Solve the problems in the attached document.",
-      dueDate: "2024-12-01",
-    },
-    {
-      primaryKey: "2",
-      activityType: "ToDo",
-      instructorName: "Jane Smith",
-      headline: "Physics Quiz",
-      subheadline: "Chapter 3: Motion",
-      description: "Review chapter 3 before attempting the quiz.",
-      dueDate: "2024-12-05",
-    },
-  ];
-
-  // Hardcoded search and filter values
   const searchQuery = "";
+  const user = useSelector(selectUser);
+  const [tasks, setTasks] = useState<
+    {
+      taskId: string;
+      completed: boolean;
+      description: string;
+      dueDate: string;
+      title: string;
+      employeeName: string;
+    }[]
+  >([]);
 
-  // Static filtered data (no dynamic filtering logic)
-  const filteredData = assignments;
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await getAllTask(user.user || "");
+        setTasks(response);
+      } catch (error) {
+        console.error("Failed to fetch tasks", error);
+      }
+    };
+
+    fetchTasks();
+  }, [user]);
 
   return (
     <div className="MyGroupsRoot h-auto">
+      <Toaster />
       <div className="flex flex-col w-full h-auto flex-grow mx-10 border-black border-[1px] rounded-[30px] p-4">
         {/* Title */}
         <div className="text-xl font-bold text-black my-8 ml-2">
@@ -69,18 +73,18 @@ export default function TasksPage() {
         </div>
         {/* Stream */}
         <div className="mt-5">
-          {filteredData.map((item) => (
-            <div className="my-3" key={item.primaryKey}>
-              <StreamCard
-                key={item.primaryKey}
-                primaryKey={item.primaryKey}
-                activityType={item.activityType}
-                instructorName={item.instructorName}
-                headline={item.headline}
-                subheadline={item.subheadline}
-                description={item.description}
-                dueDate={item.dueDate}
-                editable={false}
+          {tasks.map((data) => (
+            <div className="my-3" key={data.taskId}>
+              <EmployeeStreamCard
+                key={data.taskId}
+                primaryKey={data.taskId}
+                instructorName={data.employeeName}
+                attachments={[]}
+                description={data.description}
+                dueDate={data.dueDate}
+                headline={data.title}
+                completed={data.completed}
+                isEmployee={true}
               />
             </div>
           ))}

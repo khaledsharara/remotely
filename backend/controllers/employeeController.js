@@ -116,3 +116,41 @@ exports.getAllEmployees = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+exports.getEmployeeTasks = async (req, res) => {
+  try {
+    const { employeeUid } = req.query;
+
+    if (!employeeUid) {
+      return res.status(400).json({ error: "Employee UID is required." });
+    }
+
+    const employeeRef = db.ref(`employees/${employeeUid}`);
+    const employeeSnapshot = await employeeRef.once("value");
+
+    if (!employeeSnapshot.exists()) {
+      return res.status(404).json({ error: "Employee not found." });
+    }
+
+    const employeeData = employeeSnapshot.val();
+    const tasks = employeeData.tasks || {};
+
+    // Format the tasks to include employee name
+    const formattedTasks = Object.entries(tasks).map(([taskId, task]) => ({
+      taskId,
+      completed: task.completed,
+      description: task.description,
+      dueDate: task.dueDate,
+      title: task.title,
+      employeeName: employeeData.name || "Unknown", // Include employee name
+    }));
+
+    return res.status(200).json({
+      message: "Employee tasks found",
+      data: formattedTasks,
+    });
+  } catch (error) {
+    console.error("Error fetching employee tasks:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
