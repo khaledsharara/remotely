@@ -154,3 +154,108 @@ exports.getEmployeeTasks = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+exports.getTaskById = async (req, res) => {
+  try {
+    const { taskId } = req.query;
+
+    if (!taskId) {
+      return res.status(400).json({ error: "Task ID is required." });
+    }
+
+    const employeesRef = db.ref("employees");
+    const employeesSnapshot = await employeesRef.once("value");
+
+    let taskData = null;
+    let assignedEmployeeName = null;
+
+    employeesSnapshot.forEach((employeeSnapshot) => {
+      const employeeData = employeeSnapshot.val();
+      const tasks = employeeData.tasks || {};
+
+      Object.entries(tasks).forEach(([taskKey, task]) => {
+        if (taskKey === taskId) {
+          taskData = { ...task, id: taskKey }; // Add the ID to the task object
+          assignedEmployeeName = employeeData.name; // Assuming `name` is the field for the employee's name
+        }
+      });
+    });
+
+    if (!taskData) {
+      return res.status(404).json({ error: "Task not found." });
+    }
+
+    return res.status(200).json({
+      message: "Task found",
+      data: {
+        task: taskData,
+        assignedEmployee: assignedEmployeeName,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching task:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+exports.updateTaskChecklist = async (req, res) => {
+  try {
+    const { taskId, updatedChecklist } = req.body;
+
+    // Validate inputs
+    if (!taskId || typeof taskId !== "string") {
+      console.log("Task ID:", taskId);
+      return res.status(400).json({ error: "Task ID is required." });
+    }
+
+    if (!Array.isArray(updatedChecklist)) {
+      console.log("Checklist:", updatedChecklist);
+      return res
+        .status(400)
+        .json({ error: "Updated checklist must be a valid array of items." });
+    }
+
+    // Validate checklist items
+    for (const item of updatedChecklist) {
+      if (
+        typeof item.id !== "number" ||
+        typeof item.text !== "string" ||
+        typeof item.status !== "boolean"
+      ) {
+        console.log("Checklist item:", item);
+        return res.status(400).json({
+          error: "Each checklist item must have an id, text, and status.",
+        });
+      }
+    }
+
+    const employeesRef = db.ref("employees");
+    const employeesSnapshot = await employeesRef.once("value");
+
+    let taskRef = null;
+
+    // Find the task and get its reference
+    employeesSnapshot.forEach((employeeSnapshot) => {
+      const employeeTasks = employeeSnapshot.child("tasks").val() || {};
+
+      if (taskId in employeeTasks) {
+        taskRef = db.ref(`employees/${employeeSnapshot.key}/tasks/${taskId}`); // Reference to the task
+      }
+    });
+
+    if (!taskRef) {
+      return res.status(404).json({ error: "Task not found." });
+    }
+
+    // Update the checklist field
+    await taskRef.update({ checklist: updatedChecklist });
+
+    return res.status(200).json({
+      message: "Task checklist updated successfully.",
+      data: { taskId, updatedChecklist },
+    });
+  } catch (error) {
+    console.error("Error updating task checklist:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};

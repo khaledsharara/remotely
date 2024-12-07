@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom";
 import Checklist from "../../../Manager/Dashboard/components/Checklist";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChecklistItem } from "../../../Manager/Dashboard/utils/types";
+import { getTaskById, updateChecklist } from "../utils/tasksApis";
+import toast, { Toaster } from "react-hot-toast";
 
 const data = [
   {
@@ -118,14 +120,21 @@ const data = [
 
 function TaskPage() {
   const { id } = useParams();
-  const activity = data.find((item) => item.primaryKey === id);
+  const activity = data[0];
   const activityType = activity?.activityType;
   const [checklistItems, setChecklistItems] = useState<ChecklistItem[]>([]);
-  const activityClass: { [key: string]: string } | string =
-    {
-      done: "bg-gradient-to-r from-card-from to-card-homework",
-      todo: "bg-gradient-to-r from-card-from to-card-quiz",
-    }[activityType?.toLowerCase() as string] || "";
+  const [task, setTask] = useState<{
+    id: string;
+    completed: boolean;
+    description: string;
+    dueDate: string;
+    title: string;
+    employeeName: string;
+  } | null>(null);
+  const activityClass = task?.completed
+    ? "bg-gradient-to-r from-card-from to-card-material"
+    : "bg-gradient-to-r from-card-from to-card-homework";
+
   function formatDueDate(dueDate: string | undefined) {
     if (!dueDate) return "";
     const date = new Date(Date.parse(dueDate));
@@ -134,30 +143,63 @@ function TaskPage() {
     return `${day}.${month}`;
   }
 
+  useEffect(() => {
+    const fetchTask = async () => {
+      try {
+        const response = await getTaskById(id || "");
+        if (response) {
+          setTask(response);
+          setChecklistItems(response.checklist || []);
+          console.log("Task", response);
+        } else {
+          toast.error("Failed to fetch task");
+          setTask(null);
+        }
+      } catch (error) {
+        toast.error("Failed to fetch task");
+        console.error("Failed to get task", error);
+      }
+    };
+    fetchTask();
+  }, [id]);
+
+  useEffect(() => {
+    const updateTaskChecklist = async () => {
+      try {
+        await updateChecklist(id || "", checklistItems || []);
+      } catch (error) {
+        toast.error("Failed to update checklist");
+        console.error("Failed to update checklist", error);
+      }
+    };
+
+    if (task) {
+      updateTaskChecklist();
+    }
+  }, [checklistItems]);
+
   return (
     <div className="mx-8 space-y-4 px-3">
       {/* PRETTY BIG BOX */}
+      <Toaster />
       <div className={`w-full rounded-2xl py-7 px-9 ${activityClass}`}>
         <div className="flex flex-row justify-between">
-          <div className="font-medium text-4xl">{activity?.headline}</div>
+          <div className="font-medium text-4xl">{task?.title}</div>
           <span className="bg-black text-base h-fit opacity-50 text-white rounded-full px-4 items-center">
-            {activityType}
+            {task?.completed ? "Done" : "To-Do"}
           </span>
         </div>
         <div className="flex flex-row justify-between">
           <div>
-            <div className="font-light text-4xl my-2">
-              {activity?.subheadline}
-            </div>
             <div className="font-light text-base my-5 text-wrap">
-              {activity?.description}
+              {task?.description}
             </div>
           </div>
           <div className="flex flex-col items-end self-center">
             <span className="text-center text-3xl font-medium">
               DUE:
               <br />
-              {formatDueDate(activity?.dueDate)}
+              {formatDueDate(task?.dueDate)}
             </span>
           </div>
         </div>
