@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import Checklist from "../components/Checklist";
 import EmployeeLabelCard from "../components/EmployeeLabelCard";
 import ViewTaskStreamCard from "../components/ViewTaskStreamCard";
-import { getTaskById } from "../utils/managerApis";
+import { getTaskById, updateChecklist } from "../utils/managerApis";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { ChecklistItem } from "../utils/types";
@@ -26,6 +26,7 @@ function ViewTask() {
         const response = await getTaskById(id || "");
         if (response) {
           setTask(response);
+          setChecklistItems(response.checklist);
           console.log("Task", response);
         } else {
           toast.error("Failed to fetch task");
@@ -38,6 +39,21 @@ function ViewTask() {
     };
     fetchTask();
   }, [id]);
+
+  useEffect(() => {
+    const updateTaskChecklist = async () => {
+      try {
+        await updateChecklist(id || "", checklistItems);
+      } catch (error) {
+        toast.error("Failed to update checklist");
+        console.error("Failed to update checklist", error);
+      }
+    };
+
+    if (task) {
+      updateTaskChecklist();
+    }
+  }, [checklistItems]);
   return (
     // Parent container with flex properties to center the content
     <div className="flex flex-col items-center w-full">

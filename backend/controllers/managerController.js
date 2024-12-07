@@ -2,7 +2,7 @@ const { db } = require("../firebaseConfig");
 
 exports.addTask = async (req, res) => {
   try {
-    const { uids, title, description, dueDate } = req.body;
+    const { uids, title, description, dueDate, checklist } = req.body;
 
     // Validate the inputs
     if (!uids || !Array.isArray(uids) || uids.length === 0) {
@@ -15,11 +15,31 @@ exports.addTask = async (req, res) => {
       return res.status(400).json({ error: "All fields are required." });
     }
 
+    if (!Array.isArray(checklist)) {
+      return res
+        .status(400)
+        .json({ error: "Checklist must be a valid array of items." });
+    }
+
+    // Validate checklist items
+    for (const item of checklist) {
+      if (
+        typeof item.id !== "number" ||
+        typeof item.text !== "string" ||
+        typeof item.status !== "boolean"
+      ) {
+        return res.status(400).json({
+          error: "Each checklist item must have an id, text, and status.",
+        });
+      }
+    }
+
     const newTask = {
       title,
       description,
       dueDate,
       completed: false,
+      checklist, // Add the checklist as a sub-object
     };
 
     // Iterate over UIDs and assign the task to each
@@ -124,43 +144,6 @@ exports.getMyEmployees = async (req, res) => {
   }
 };
 
-exports.addChecklistItem = async (req, res) => {
-  try {
-    const { uid, taskId, title } = req.body;
-
-    if (!uid || !taskId || !title) {
-      return res.status(400).json({ error: "All fields are required." });
-    }
-
-    const taskRef = db.ref(`employees/${uid}/tasks/${taskId}`);
-    const taskSnapshot = await taskRef.once("value");
-
-    if (!taskSnapshot.exists()) {
-      return res.status(404).json({ error: "Task not found." });
-    }
-
-    const taskData = taskSnapshot.val();
-    const checklist = taskData.checklist || [];
-
-    const newChecklistItem = {
-      title,
-      status: false,
-    };
-
-    checklist.push(newChecklistItem);
-
-    await taskRef.update({ checklist });
-
-    return res.status(200).json({
-      message: "Checklist item added successfully",
-      data: newChecklistItem,
-    });
-  } catch (error) {
-    console.error("Error adding checklist item:", error);
-    return res.status(500).json({ error: error.message });
-  }
-};
-
 exports.getTaskById = async (req, res) => {
   try {
     const { taskId } = req.query;
@@ -251,6 +234,68 @@ exports.getMyEmployeesTasks = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching tasks:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+exports.updateTaskChecklist = async (req, res) => {
+  try {
+    const { taskId, updatedChecklist } = req.body;
+
+    // Validate inputs
+    if (!taskId || typeof taskId !== "string") {
+      console.log("Task ID:", taskId);
+      return res.status(400).json({ error: "Task ID is required." });
+    }
+
+    if (!Array.isArray(updatedChecklist)) {
+      console.log("Checklist:", updatedChecklist);
+      return res
+        .status(400)
+        .json({ error: "Updated checklist must be a valid array of items." });
+    }
+
+    // Validate checklist items
+    for (const item of updatedChecklist) {
+      if (
+        typeof item.id !== "number" ||
+        typeof item.text !== "string" ||
+        typeof item.status !== "boolean"
+      ) {
+        console.log("Checklist item:", item);
+        return res.status(400).json({
+          error: "Each checklist item must have an id, text, and status.",
+        });
+      }
+    }
+
+    const employeesRef = db.ref("employees");
+    const employeesSnapshot = await employeesRef.once("value");
+
+    let taskRef = null;
+
+    // Find the task and get its reference
+    employeesSnapshot.forEach((employeeSnapshot) => {
+      const employeeTasks = employeeSnapshot.child("tasks").val() || {};
+
+      if (taskId in employeeTasks) {
+        taskRef = db.ref(`employees/${employeeSnapshot.key}/tasks/${taskId}`); // Reference to the task
+      }
+    });
+
+    if (!taskRef) {
+      return res.status(404).json({ error: "Task not found." });
+    }
+
+    // Update the checklist field
+    await taskRef.update({ checklist: updatedChecklist });
+
+    return res.status(200).json({
+      message: "Task checklist updated successfully.",
+      data: { taskId, updatedChecklist },
+    });
+  } catch (error) {
+    console.error("Error updating task checklist:", error);
     return res.status(500).json({ error: error.message });
   }
 };

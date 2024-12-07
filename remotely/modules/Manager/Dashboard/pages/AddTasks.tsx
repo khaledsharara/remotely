@@ -59,6 +59,7 @@ function AddTasks() {
         description: taskData.description,
         dueDate: dueDate?.format("YYYY-MM-DD") || "",
         uids: selectedEmployees,
+        checklist: checklistItems,
       });
       toast.dismiss();
       toast.success("Task assigned");

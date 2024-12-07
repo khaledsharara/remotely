@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ChecklistItem } from "./types";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -32,6 +33,7 @@ export const createTask = async (task: {
   description: string;
   dueDate: string;
   uids: string[];
+  checklist: ChecklistItem[];
 }) => {
   try {
     console.log("Task", task);
@@ -91,10 +93,32 @@ export const getTaskById = async (taskId: string) => {
       title: task.task.title,
       id: task.task.id,
       employeeName: task.assignedEmployee,
+      checklist: task.task.checklist,
     };
 
     return formattedTask;
   } catch (error) {
     console.error("Failed to get task", error);
+  }
+};
+
+export const updateChecklist = async (
+  taskId: string,
+  checklist: ChecklistItem[]
+) => {
+  try {
+    console.log("Checklist", checklist);
+    console.log("TaskId", taskId);
+    const response = await axios.put(
+      `${BASE_URL}/api/managers/task/checklist`,
+      {
+        taskId,
+        updatedChecklist: checklist,
+      }
+    );
+    const updatedChecklist = response.data;
+    return updatedChecklist;
+  } catch (error) {
+    console.error("Failed to update checklist", error);
   }
 };
