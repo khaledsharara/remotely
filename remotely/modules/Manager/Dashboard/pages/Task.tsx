@@ -84,18 +84,23 @@ function Tasks() {
 
       {/* EmployeeStreamCard below the search bar and Add Task button */}
       <div className="flex flex-col space-y-4 w-full">
-        {filteredData.map((data) => (
-          <EmployeeStreamCard
-            key={data.taskId}
-            primaryKey={data.taskId}
-            instructorName={data.employeeName}
-            attachments={[]}
-            description={data.description}
-            dueDate={data.dueDate}
-            headline={data.title}
-            completed={data.completed}
-          />
-        ))}
+        {filteredData
+          .sort(
+            (a, b) =>
+              new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+          )
+          .map((data) => (
+            <EmployeeStreamCard
+              key={data.taskId}
+              primaryKey={data.taskId}
+              instructorName={data.employeeName}
+              attachments={[]}
+              description={data.description}
+              dueDate={data.dueDate}
+              headline={data.title}
+              completed={data.completed}
+            />
+          ))}
       </div>
     </div>
   );

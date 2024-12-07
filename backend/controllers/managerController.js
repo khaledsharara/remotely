@@ -173,12 +173,18 @@ exports.getTaskById = async (req, res) => {
     const employeesSnapshot = await employeesRef.once("value");
 
     let taskData = null;
+    let assignedEmployeeName = null;
+
     employeesSnapshot.forEach((employeeSnapshot) => {
-      const tasks = employeeSnapshot.val().tasks || {};
-      const task = Object.values(tasks).find((t) => t.id === taskId);
-      if (task) {
-        taskData = task;
-      }
+      const employeeData = employeeSnapshot.val();
+      const tasks = employeeData.tasks || {};
+
+      Object.entries(tasks).forEach(([taskKey, task]) => {
+        if (taskKey === taskId) {
+          taskData = { ...task, id: taskKey }; // Add the ID to the task object
+          assignedEmployeeName = employeeData.name; // Assuming `name` is the field for the employee's name
+        }
+      });
     });
 
     if (!taskData) {
@@ -187,7 +193,10 @@ exports.getTaskById = async (req, res) => {
 
     return res.status(200).json({
       message: "Task found",
-      data: taskData,
+      data: {
+        task: taskData,
+        assignedEmployee: assignedEmployeeName,
+      },
     });
   } catch (error) {
     console.error("Error fetching task:", error);

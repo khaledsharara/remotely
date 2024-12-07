@@ -73,3 +73,28 @@ export const getAllEmployeeTasks = async (managerUid: string) => {
     console.error("Failed to get tasks", error);
   }
 };
+
+export const getTaskById = async (taskId: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/managers/task`, {
+      params: {
+        taskId,
+      },
+    });
+    const task = response.data.data;
+    console.log("TASK: ", task);
+
+    const formattedTask = {
+      completed: task.task.completed,
+      description: task.task.description,
+      dueDate: task.task.dueDate,
+      title: task.task.title,
+      id: task.task.id,
+      employeeName: task.assignedEmployee,
+    };
+
+    return formattedTask;
+  } catch (error) {
+    console.error("Failed to get task", error);
+  }
+};
