@@ -49,7 +49,7 @@ const userSlice = createSlice({
       state.employeeRole = action.payload.employeeRole;
 
       // Save user data to local storage
-      // localStorage.setItem("user", JSON.stringify(state));
+      localStorage.setItem("user", JSON.stringify(state));
     },
     logout: (state) => {
       state.user = null;
@@ -60,7 +60,7 @@ const userSlice = createSlice({
       state.employeeRole = null;
 
       // Clear user data from local storage
-      // localStorage.removeItem("user");
+      localStorage.removeItem("user");
     },
   },
 });
