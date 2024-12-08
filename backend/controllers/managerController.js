@@ -333,7 +333,7 @@ exports.getEmployeeInfo = async (req, res) => {
 
 exports.getEmployeeLogs = async (req, res) => {
   try {
-    const { uid } = req.body;
+    const { uid } = req.query;
 
     const logRef = db.ref("logs");
     const logs = [];

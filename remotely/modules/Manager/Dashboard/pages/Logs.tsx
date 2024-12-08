@@ -1,19 +1,96 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getEmployee, getEmployeeLogs } from "../utils/managerApis";
+import { Task } from "../utils/types";
+
 interface Employee {
   primaryKey: string;
   name: string;
 }
 
+type Log = {
+  date: string;
+  action: string;
+  uid: string;
+};
+
 const Logs: React.FC = () => {
-  const employees: Employee[] = [
-    { primaryKey: "1", name: "Ada Lovelace" },
-    // Add more filler employees as needed
-  ];
-  const logs = Array(10).fill({
-    date: "20/10/2024",
-    logIn: "10:00 AM",
-    logOut: "5:33 PM",
+  const { id } = useParams();
+  const [logs, setLogs] = useState<Log[]>([]);
+  const [formattedLogs, setFormattedLogs] = useState<
+    {
+      date: string;
+      time: string;
+      action: string;
+    }[]
+  >([]);
+  const [employee, setEmployee] = useState<{
+    createdBy: { managerName: string; managerUid: string };
+    email: string;
+    name: string;
+    role: string;
+    tasks: {
+      [key: string]: Task;
+    };
+    uid: string;
+  }>({
+    createdBy: { managerName: "", managerUid: "" },
+    email: "",
+    name: "",
+    role: "",
+    tasks: {},
+    uid: "",
   });
-  const employee = employees[0];
+
+  useEffect(() => {
+    const formattedLogs = logs.map((log) => {
+      const [date, time] = log.date.split("T");
+
+      // Convert to AM/PM format
+      const timeParts = time.slice(0, 5).split(":");
+      let hours = parseInt(timeParts[0], 10);
+      const minutes = timeParts[1];
+      const period = hours >= 12 ? "PM" : "AM";
+
+      // Adjust hours for 12-hour format
+      hours = hours % 12 || 12; // Convert 0 to 12 for midnight
+
+      return {
+        date,
+        time: `${hours}:${minutes} ${period}`,
+        action: log.action,
+      };
+    });
+
+    console.log("Formatted logs", formattedLogs);
+
+    setFormattedLogs(formattedLogs);
+  }, [logs]);
+
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        const response = await getEmployeeLogs(id || "");
+        console.log("Logs", response);
+        setLogs(response.data);
+      } catch (error) {
+        console.error("Failed to get logs", error);
+      }
+    };
+
+    const fetchEmployee = async () => {
+      try {
+        const response = await getEmployee(id || "");
+        console.log("Employee", response);
+        setEmployee(response);
+      } catch (error) {
+        console.error("Failed to get employee", error);
+      }
+    };
+
+    fetchLogs();
+    fetchEmployee();
+  }, [id]);
 
   return (
     <div className="flex flex-col  w-full">
@@ -37,28 +114,34 @@ const Logs: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-row w-full mt-5 border-b-[1px] border-black ml-28  py-5">
-        <div className="flex w-[20%] text-xl text-slate-700 ">Date</div>
-        <div className="flex  text-xl text-slate-700 ">
-          <span className="px-9 ">Logged-in</span>
-          <span className="px-9 ">Logged-out</span>
-        </div>
-      </div>
-      {logs.map((log, index) => (
-        <div key={index} className="flex flex-col w-full ml-28 ">
-          <div className="flex flex-row  ">
-            <div className="flex w-[20%] font-sans  justify-center py-5 border-r-[1px] border-black text-lg text-slate-700 bg-gray-300 shadow-xl">
-              {log.date}
-            </div>
-            <div className="flex text-lg text-slate-700 py-5 px-14 border-r-[1px] border-black font-sans bg-gray-300 shadow-xl">
-              {log.logIn}
-            </div>
-            <div className="flex text-lg text-slate-700 py-5 px-20 font-sans bg-gray-300 rounded-tr-lg shadow-xl">
-              {log.logOut}
-            </div>
+      <div className="max-w-screen-lg">
+        <div className="grid grid-cols-3 w-full mt-5 border-b-[1px] border-black ml-28  py-5">
+          <div className="flex justi col-span-1 justify-center text-xl text-slate-700 ">
+            Date
+          </div>
+          <div className="flex col-span-1 justify-center text-xl text-slate-700 ">
+            Action
+          </div>
+          <div className="flex col-span-1 justify-center text-xl text-slate-700 ">
+            Time
           </div>
         </div>
-      ))}
+        {formattedLogs.map((log, index) => (
+          <div key={index} className="flex flex-col w-full ml-28 ">
+            <div className="grid grid-cols-3">
+              <div className="flex col-span-1 font-sans  justify-center py-5 border-r-[1px] border-black text-lg text-slate-700 bg-gray-300 shadow-xl">
+                {log.date}
+              </div>
+              <div className="flex text-lg col-span-1 justify-center text-slate-700 py-5 px-14 border-r-[1px] border-black font-sans bg-gray-300 shadow-xl">
+                {log.action}
+              </div>
+              <div className="flex text-lg col-span-1 justify-center text-slate-700 py-5 px-20 font-sans bg-gray-300 rounded-tr-lg shadow-xl">
+                {log.time}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

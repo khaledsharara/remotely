@@ -137,3 +137,17 @@ export const getEmployee = async (uid: string) => {
     console.error("Failed to get employee", error);
   }
 };
+
+export const getEmployeeLogs = async (uid: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/managers/employee/logs`, {
+      params: {
+        uid,
+      },
+    });
+    const logs = response.data;
+    return logs;
+  } catch (error) {
+    console.error("Failed to get employee logs", error);
+  }
+};
