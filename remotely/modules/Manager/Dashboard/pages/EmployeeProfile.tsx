@@ -85,10 +85,6 @@ function EmployeeProfile() {
       <div className="flex-col border-black border-[1px] rounded-[30px] mt-10 w-[97%] ml-5">
         <div className="flex flex-row ml-5 p-6 items-center justify-between">
           <span className="text-xl">All</span>
-          <div className="ml-auto px-4 py-2 bg-gray-400 rounded-[30px] space-x-8">
-            <span className="text-gray-800">Filter by</span>
-            <span>↓</span>
-          </div>
         </div>
 
         {tasks.map((task, index) => (

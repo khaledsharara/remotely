@@ -61,8 +61,24 @@ export const handleLogin = async (email: string, password: string) => {
       email: userInfo?.email,
       employeeRole: userInfo?.employeeRole,
     };
+
+    if (user?.role === "employee") {
+      logUser(user.user, "login");
+    }
+
     return user as userInfo;
   } catch (error) {
     console.error("Login failed", error);
+  }
+};
+
+export const logUser = async (uid: string, action: string) => {
+  try {
+    await axios.post(`${API_URL}/api/auth/log`, {
+      uid,
+      action,
+    });
+  } catch (error) {
+    console.error("Failed to log login", error);
   }
 };

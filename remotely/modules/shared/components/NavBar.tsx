@@ -2,12 +2,14 @@ import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "../utils/userSlice";
 import "../styles/NavBar.css";
+import { logUser } from "../../auth/utils/authApis";
 
 function NavBar() {
   const location = useLocation();
   const dispatch = useDispatch();
+  const user = useSelector(selectUser);
   const currentTab = location.pathname.split("/")[1];
-  const userRole = useSelector(selectUser).role;
+  const userRole = user.role;
 
   if (userRole === "employee") {
     return (
@@ -35,7 +37,11 @@ function NavBar() {
         </div>
         <button
           className="justify-self-end mr-4 bg-primary w-fit h-fit self-center text-white rounded px-4 py-2 active:bg-primary-dark"
-          onClick={() => dispatch(logout())}
+          onClick={async () => {
+            console.log("Logging out", user?.user);
+            await logUser(user?.user || "", "logout");
+            dispatch(logout());
+          }}
         >
           log out
         </button>

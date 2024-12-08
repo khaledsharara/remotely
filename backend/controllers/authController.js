@@ -43,3 +43,23 @@ exports.getUserInfo = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+exports.logUser = async (req, res) => {
+  try {
+    const { uid, action } = req.body;
+
+    const logRef = db.ref("logs");
+
+    const newLog = {
+      uid,
+      action,
+      date: new Date().toISOString(),
+    };
+
+    await logRef.push(newLog);
+
+    return res.status(200).json({ message: "User logged" });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};

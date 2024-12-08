@@ -330,3 +330,27 @@ exports.getEmployeeInfo = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+exports.getEmployeeLogs = async (req, res) => {
+  try {
+    const { uid } = req.body;
+
+    const logRef = db.ref("logs");
+    const logs = [];
+
+    await logRef.once("value", (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        if (childSnapshot.val().uid === uid) {
+          logs.push(childSnapshot.val());
+        }
+      });
+    });
+
+    return res.status(200).json({
+      message: "Logs found",
+      data: logs,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
