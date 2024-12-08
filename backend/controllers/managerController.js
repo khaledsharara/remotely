@@ -299,3 +299,34 @@ exports.updateTaskChecklist = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+exports.getEmployeeInfo = async (req, res) => {
+  try {
+    const { uid } = req.query;
+
+    if (!uid) {
+      return res.status(400).json({ error: "Employee UID is required." });
+    }
+
+    const employeeRef = db.ref(`employees/${uid}`);
+    const employeeSnapshot = await employeeRef.once("value");
+
+    if (!employeeSnapshot.exists()) {
+      return res.status(404).json({ error: "Employee not found." });
+    }
+
+    const employeeData = employeeSnapshot.val();
+    const tasks = employeeData.tasks || [];
+
+    return res.status(200).json({
+      message: "Employee found",
+      data: {
+        ...employeeData,
+        tasks,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching employee:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};

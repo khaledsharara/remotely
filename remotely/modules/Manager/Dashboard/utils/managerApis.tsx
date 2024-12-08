@@ -122,3 +122,18 @@ export const updateChecklist = async (
     console.error("Failed to update checklist", error);
   }
 };
+
+export const getEmployee = async (uid: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/managers/employee`, {
+      params: {
+        uid,
+      },
+    });
+    const employee = response?.data?.data;
+    console.log("Employee: ", employee);
+    return employee;
+  } catch (error) {
+    console.error("Failed to get employee", error);
+  }
+};

@@ -1,4 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getEmployee } from "../utils/managerApis";
+import { ChecklistItem, Task } from "../utils/types";
+import toast, { Toaster } from "react-hot-toast";
 
 const employees = [
   { primaryKey: "1", name: "Ada Lovelace" },
@@ -8,23 +12,53 @@ const employees = [
 ];
 
 function EmployeeProfile() {
-  // Using a placeholder employee for demonstration
+  const { id } = useParams();
   const navigate = useNavigate();
+  // const employee = employees[0];
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const [employee, setEmployee] = useState<{
+    createdBy: { managerName: string; managerUid: string };
+    email: string;
+    name: string;
+    role: string;
+    tasks: {
+      [key: string]: Task;
+    };
+    uid: string;
+  }>({
+    createdBy: { managerName: "", managerUid: "" },
+    email: "",
+    name: "",
+    role: "",
+    tasks: {},
+    uid: "",
+  });
+
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      {
+        try {
+          const response = await getEmployee(id || "");
+          setEmployee(response);
+          setTasks(Object.values(response.tasks));
+        } catch (error) {
+          console.error("Failed to get employee", error);
+          toast.error("Failed to get employee");
+        }
+      }
+    };
+
+    fetchEmployee();
+  }, [id]);
+
   const handleCardClick = (primaryKey: string) => {
     navigate(`/dashboard/employees/logs/${primaryKey}`);
   };
-  const employee = employees[0];
-
-  // Array of tasks (could be static or dynamic)
-  const tasks = Array(4).fill({
-    title: "Task",
-    status: "Done",
-    dueDate: "Due 29.07, 11.59pm",
-    verificationStatus: "Unverified",
-  });
 
   return (
     <div className="flex flex-col w-full">
+      <Toaster />
       <div className="p-5">
         {/* Big Name section */}
         <div className="flex flex-row justify-between border-black border-[1px] rounded-[30px] w-full px-[2rem] py-[1rem]">
@@ -34,13 +68,16 @@ function EmployeeProfile() {
               Front-end
             </div>
             <div className="flex border-[1px] border-black w-fit rounded-full px-4 mt-2 ">
-              <button onClick={() => handleCardClick(employee.primaryKey)}>
-                {" "}
+              <button onClick={() => handleCardClick(employee.uid)}>
                 Check logs
               </button>
             </div>
           </div>
-          <img alt="Profile pic" className="h-32 justify-self-center" />
+          <img
+            alt="Profile pic"
+            src="/profile.svg"
+            className="h-32 justify-self-center"
+          />
         </div>
         {/* Submissions section */}
       </div>
@@ -63,16 +100,15 @@ function EmployeeProfile() {
               <div className="flex flex-row items-center mb-2">
                 <span className="text-2xl font-extralight">{task.title}</span>
                 <div className="flex ml-auto">
-                  <span className="text-blue-600">{task.status}</span>
+                  <span className="text-blue-600">
+                    {task.completed ? "Done" : "To-Do"}
+                  </span>
                 </div>
               </div>
               <div className="flex flex-row items-center">
                 <span className="text-lg font-thin text-blue-600">
                   {task.dueDate}
                 </span>
-                <div className="flex ml-auto">
-                  <span className="text-xl">{task.verificationStatus}</span>
-                </div>
               </div>
             </div>
           </div>
