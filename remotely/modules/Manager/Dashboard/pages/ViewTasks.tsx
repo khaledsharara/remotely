@@ -70,6 +70,7 @@ function ViewTask() {
           <span className="text-4xl">Assigned to</span>
         </div>
         <EmployeeLabelCard
+          taskId={task?.id || ""}
           employeeName={task?.employeeName || ""}
           completed={task?.completed || false}
         />

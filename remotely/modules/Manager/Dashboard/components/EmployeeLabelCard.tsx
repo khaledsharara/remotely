@@ -1,12 +1,27 @@
+import toast from "react-hot-toast";
+import { completeTask } from "../utils/managerApis";
+
 //constant values
 function EmployeeLabelCard({
   completed,
   employeeName,
+  taskId,
 }: {
   completed: boolean;
   employeeName: string;
+  taskId: string;
 }) {
-  //constant values
+  const verifyTask = async () => {
+    try {
+      toast.promise(completeTask(taskId), {
+        loading: "Verifying task...",
+        success: "Task verified successfully",
+        error: "Failed to verify task",
+      });
+    } catch (error) {
+      toast.error("Failed to verify task");
+    }
+  };
 
   return (
     <div className="w-full rounded-2xl px-8 py-4   bg-slate-400 h-24">
@@ -20,7 +35,11 @@ function EmployeeLabelCard({
             <span>{employeeName}</span>
             <button
               type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4  font-medium rounded-lg text-sm px-5 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none "
+              className={`text-white focus:ring-4  font-medium rounded-lg text-sm px-5 py-2 focus:outline-none ${
+                completed ? "bg-blue-300" : "hover:bg-blue-800 bg-blue-700 "
+              } `}
+              disabled={completed}
+              onClick={verifyTask}
             >
               Verify
             </button>

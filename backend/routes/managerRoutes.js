@@ -8,6 +8,7 @@ const {
   updateTaskChecklist,
   getEmployeeInfo,
   getEmployeeLogs,
+  completeTask,
 } = require("../controllers/managerController");
 
 router.post("/add-task", addTask);
@@ -19,5 +20,6 @@ router.get("/tasks", getMyEmployeesTasks);
 router.put("/task/checklist", updateTaskChecklist);
 router.get("/employee", getEmployeeInfo);
 router.get("/employee/logs", getEmployeeLogs);
+router.put("/task/complete", completeTask);
 
 module.exports = router;

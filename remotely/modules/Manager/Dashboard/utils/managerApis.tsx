@@ -151,3 +151,17 @@ export const getEmployeeLogs = async (uid: string) => {
     console.error("Failed to get employee logs", error);
   }
 };
+
+export const completeTask = async (taskId: string) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/api/managers/task/complete`, {
+      params: {
+        taskId,
+      },
+    });
+    const updatedTask = response.data;
+    return updatedTask;
+  } catch (error) {
+    console.error("Failed to complete task", error);
+  }
+};

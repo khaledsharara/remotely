@@ -354,3 +354,43 @@ exports.getEmployeeLogs = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+// Complete task using only taskid
+exports.completeTask = async (req, res) => {
+  try {
+    const { taskId } = req.query;
+
+    if (!taskId) {
+      return res.status(400).json({ error: "Task ID is required." });
+    }
+
+    const employeesRef = db.ref("employees");
+    const employeesSnapshot = await employeesRef.once("value");
+
+    let taskRef = null;
+
+    // Find the task and get its reference
+    employeesSnapshot.forEach((employeeSnapshot) => {
+      const employeeTasks = employeeSnapshot.child("tasks").val() || {};
+
+      if (taskId in employeeTasks) {
+        taskRef = db.ref(`employees/${employeeSnapshot.key}/tasks/${taskId}`); // Reference to the task
+      }
+    });
+
+    if (!taskRef) {
+      return res.status(404).json({ error: "Task not found." });
+    }
+
+    // Update the completed field
+    await taskRef.update({ completed: true });
+
+    return res.status(200).json({
+      message: "Task completed successfully.",
+      data: { taskId },
+    });
+  } catch (error) {
+    console.error("Error completing task:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
