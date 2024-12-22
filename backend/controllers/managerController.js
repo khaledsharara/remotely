@@ -396,3 +396,44 @@ exports.completeTask = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+// Generate analytics for each employee
+exports.generateAnalytics = async (req, res) => {
+  try {
+    const employeesRef = db.ref("employees");
+    const employeesSnapshot = await employeesRef.once("value");
+
+    const analytics = [];
+
+    employeesSnapshot.forEach((employeeSnapshot) => {
+      const employeeData = employeeSnapshot.val();
+      const tasks = employeeData.tasks || {};
+
+      let completedTasks = 0;
+      let totalTasks = 0;
+
+      Object.values(tasks).forEach((task) => {
+        totalTasks++;
+        if (task.completed) {
+          completedTasks++;
+        }
+      });
+
+      const completionRate = totalTasks > 0 ? completedTasks / totalTasks : 0;
+
+      analytics.push({
+        uid: employeeData.uid,
+        name: employeeData.name,
+        completionRate,
+      });
+    });
+
+    return res.status(200).json({
+      message: "Analytics generated successfully.",
+      data: analytics,
+    });
+  } catch (error) {
+    console.error("Error generating analytics:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};

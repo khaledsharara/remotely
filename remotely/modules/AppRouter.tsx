@@ -19,6 +19,7 @@ import Employee from "./Manager/Dashboard/pages/Employee";
 import EmployeeProfile from "./Manager/Dashboard/pages/EmployeeProfile";
 import Logs from "./Manager/Dashboard/pages/Logs";
 import AddEmployee from "./Manager/Dashboard/pages/AddEmployee";
+import AnalyticsTable from "./Manager/Dashboard/pages/Analytics";
 
 function ErrorBoundary() {
   return (
@@ -99,6 +100,7 @@ function AppRouter() {
         { path: "employees/:id", element: <EmployeeProfile /> },
         { path: "employees/logs/:id", element: <Logs /> },
         { path: "employees/addEmployee/", element: <AddEmployee /> }, // Ensure this path is correct
+        { path: "analytics", element: <AnalyticsTable /> },
       ],
       errorElement: <ErrorBoundary />,
     },

@@ -168,3 +168,13 @@ export const completeTask = async (taskId: string) => {
     console.error("Failed to complete task", error);
   }
 };
+
+export const generateAnalytics = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/managers/analytics`);
+    const analytics = response.data;
+    return analytics;
+  } catch (error) {
+    console.error("Failed to get analytics", error);
+  }
+};
