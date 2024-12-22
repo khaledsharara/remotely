@@ -13,11 +13,15 @@ function EmployeeLabelCard({
 }) {
   const verifyTask = async () => {
     try {
-      toast.promise(completeTask(taskId), {
+      // Wrapping the completeTask call inside the toast.promise
+      await toast.promise(completeTask(taskId), {
         loading: "Verifying task...",
         success: "Task verified successfully",
         error: "Failed to verify task",
       });
+
+      // Reload the page after success
+      window.location.reload();
     } catch (error) {
       toast.error("Failed to verify task");
     }
@@ -36,7 +40,7 @@ function EmployeeLabelCard({
             <button
               type="button"
               className={`text-white focus:ring-4  font-medium rounded-lg text-sm px-5 py-2 focus:outline-none ${
-                completed ? "bg-blue-300" : "hover:bg-blue-800 bg-blue-700 "
+                completed ? "bg-blue-400" : "hover:bg-blue-800 bg-blue-700 "
               } `}
               disabled={completed}
               onClick={verifyTask}

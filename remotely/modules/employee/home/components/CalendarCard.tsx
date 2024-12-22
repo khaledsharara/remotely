@@ -1,11 +1,11 @@
-import React from "react";
+import { useState } from "react";
 import Calendar from "./Calendar";
 import "../styles/CalendarCard.css";
 import MeetingEvent from "./MeetingEvents";
 
 function CalendarCard() {
   // init the date
-  const date = React.useState<Date>(new Date());
+  const date = useState<Date>(new Date());
   return (
     <div className="w-full h-[400px] rounded-[30px] grid grid-cols-2 bg-button py-8">
       {/* Upcoming Meetings */}

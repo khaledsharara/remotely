@@ -5,7 +5,7 @@
 /* BIG BOI STUFF */
 .event-root {
   @apply w-full
-		overflow-y-scroll;
+		overflow-y-auto;
 }
 
 .event-content {

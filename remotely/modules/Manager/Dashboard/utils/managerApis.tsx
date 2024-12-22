@@ -153,12 +153,15 @@ export const getEmployeeLogs = async (uid: string) => {
 };
 
 export const completeTask = async (taskId: string) => {
+  console.log("Verifying task: ", taskId);
   try {
-    const response = await axios.put(`${BASE_URL}/api/managers/task/complete`, {
-      params: {
-        taskId,
-      },
-    });
+    const response = await axios.put(
+      `${BASE_URL}/api/managers/task/complete`,
+      {}, // Empty body
+      {
+        params: { taskId }, // Correctly sends taskId as a query parameter
+      }
+    );
     const updatedTask = response.data;
     return updatedTask;
   } catch (error) {

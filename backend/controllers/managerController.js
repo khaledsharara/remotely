@@ -360,6 +360,8 @@ exports.completeTask = async (req, res) => {
   try {
     const { taskId } = req.query;
 
+    console.log("Task Id: ", taskId);
+
     if (!taskId) {
       return res.status(400).json({ error: "Task ID is required." });
     }

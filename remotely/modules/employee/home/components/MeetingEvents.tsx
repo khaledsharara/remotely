@@ -1,24 +1,33 @@
+import { useEffect, useState } from "react";
 import "../styles/event.css";
+import { getAllTask } from "../utils/homeApis";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../shared/utils/userSlice";
+import { Task } from "../../../Manager/Dashboard/utils/types";
 
 function MeetingEvent() {
+  const user = useSelector(selectUser);
+  const [data, setData] = useState<Task[]>([]);
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const res = await getAllTask(user.user ?? "");
+        // If duedate is after today, set data
+        const today = new Date();
+        const filteredData = res.filter((task: Task) => {
+          const dueDate = new Date(task.dueDate);
+          return dueDate >= today;
+        });
+        setData(filteredData);
+      } catch (error) {
+        console.error("Failed to fetch tasks", error);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
   // Static filler data for events
-  const data = [
-    {
-      meeting_name: "Team Sync",
-      datetime: "2024-10-30T10:00:00Z",
-      status: 0,
-    },
-    {
-      meeting_name: "Project Kickoff",
-      datetime: "2024-11-01T14:00:00Z",
-      status: 1,
-    },
-    {
-      meeting_name: "Client Review",
-      datetime: "2024-11-05T16:00:00Z",
-      status: 2,
-    },
-  ];
 
   function formatDateTime(datetime: string) {
     const date = new Date(datetime);
@@ -38,7 +47,7 @@ function MeetingEvent() {
   }
 
   return (
-    <div className="event-root p-4">
+    <div className="event-root p-4 h-full">
       <div className="grid auto-rows-max my-2">
         {data.map((event, index: number) => {
           return (
@@ -56,13 +65,13 @@ function MeetingEvent() {
                   className="size-6"
                 >
                   <circle cx="12" cy="12" r="10" fill="#BFBFBF"></circle>
-                  {event.status === 0 ? (
+                  {event.completed === false ? (
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                     />
-                  ) : event.status === 1 ? (
+                  ) : event.completed === true ? (
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -79,14 +88,14 @@ function MeetingEvent() {
               </div>
 
               <div className="event-date">
-                {formatDateTime(event.datetime).date}
+                {formatDateTime(event.dueDate).date}
               </div>
               <div className="event-card rounded-[20px]">
                 <div className="event-body">
-                  <div className="event-title">{event.meeting_name}</div>
+                  <div className="event-title">{event.title}</div>
                 </div>
                 <div className="event-time">
-                  {formatDateTime(event.datetime).time}
+                  {formatDateTime(event.dueDate).time}
                 </div>
               </div>
             </div>

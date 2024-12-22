@@ -36,8 +36,7 @@ function ProfilePage() {
   return (
     <div className="px-12 py-4">
       <ProfileCard />
-      <div className="grid grid-cols-2 gap-4 my-4">
-        <PerformanceCard />
+      <div className="flex justify-center my-5">
         <ProgressDonutCard />
       </div>
       <div>
