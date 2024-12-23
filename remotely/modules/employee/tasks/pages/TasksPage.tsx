@@ -7,8 +7,18 @@ import { getAllTask } from "../utils/tasksApis";
 import { Toaster } from "react-hot-toast";
 
 export default function TasksPage() {
-  const searchQuery = "";
+  const [searchQuery, setSearchQuery] = useState("");
   const user = useSelector(selectUser);
+  const [filteredData, setFilteredData] = useState<
+    {
+      taskId: string;
+      completed: boolean;
+      description: string;
+      dueDate: string;
+      title: string;
+      employeeName: string;
+    }[]
+  >([]);
   const [tasks, setTasks] = useState<
     {
       taskId: string;
@@ -33,6 +43,17 @@ export default function TasksPage() {
     fetchTasks();
   }, [user]);
 
+  useEffect(() => {
+    if (searchQuery === "") {
+      setFilteredData(tasks);
+    } else {
+      const filtered = tasks.filter((task) =>
+        task.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredData(filtered);
+    }
+  }, [searchQuery, tasks]);
+
   return (
     <div className="MyGroupsRoot h-auto">
       <Toaster />
@@ -51,29 +72,22 @@ export default function TasksPage() {
               placeholder="Search..."
               className="w-full bg-transparent px-5 h-full pr-10 rounded-full text-sm border-2 border-solid border-black focus:border-black focus:ring-0 focus:outline-none"
               value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           {/* Filter */}
           <div className="group inline-block w-1/4 relative">
-            <button className="items-center w-full rounded-full px-4 py-2 bg-button outline-none">
+            <div className="items-center w-full rounded-full px-4 py-2 bg-transparent outline-none">
               <div className="flex flex-row justify-between">
-                <span className="pr-1 text-sm">Filter By</span>
-                <span className="self-end">
-                  <svg
-                    className="fill-current h-4 w-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
-                </span>
+                <span className="pr-1 text-sm text-transparent">Filter By</span>
+                <span className="self-end"></span>
               </div>
-            </button>
+            </div>
           </div>
         </div>
         {/* Stream */}
         <div className="mt-5">
-          {tasks.map((data) => (
+          {filteredData.map((data) => (
             <div className="my-3" key={data.taskId}>
               <EmployeeStreamCard
                 key={data.taskId}

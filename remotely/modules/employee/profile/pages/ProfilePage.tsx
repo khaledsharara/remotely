@@ -1,37 +1,44 @@
-import PerformanceCard from "../components/PerformanceCard";
 import ProfileCard from "../components/Profilecard";
 import ProgressDonutCard from "../components/ProgressDonutCard";
 import SubmissionCard from "../components/PostCard";
 import SubmissionsHeader from "../components/SubmissionsHeader";
+import { Task } from "../../../Manager/Dashboard/utils/types";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../shared/utils/userSlice";
+import { getAllTask } from "../utils/profileApis";
 
 function ProfilePage() {
-  // Static filler data for submissions
-  const data = [
-    {
-      headline: "Assignment 1 Submitted",
-      activity: "You submitted your first assignment.",
-      dueDate: "2024-10-10",
-      instructorName: "Dr. Smith",
-      gradeLetter: "A",
-      grade: 95,
-    },
-    {
-      headline: "Midterm Project",
-      activity: "Your midterm project has been graded.",
-      dueDate: "2024-10-15",
-      instructorName: "Prof. Johnson",
-      gradeLetter: "B+",
-      grade: 88,
-    },
-    {
-      headline: "Final Exam Scheduled",
-      activity: "Your final exam is scheduled for next week.",
-      dueDate: "2024-11-01",
-      instructorName: "Dr. Brown",
-      gradeLetter: "N/A",
-      grade: null,
-    },
-  ];
+  const [query, setQuery] = useState("");
+  const [data, setData] = useState<Task[]>([]);
+  const [filteredData, setFilteredData] = useState<Task[]>([]);
+  const user = useSelector(selectUser);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const res = await getAllTask(user.user ?? "");
+        setData(res);
+      } catch (error) {
+        console.error("Failed to fetch tasks", error);
+      }
+    };
+
+    if (user.user) {
+      fetchTasks();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (query === "") {
+      setFilteredData(data);
+    } else {
+      const filtered = data.filter((task) =>
+        task.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredData(filtered);
+    }
+  }, [query, data]);
 
   return (
     <div className="px-12 py-4">
@@ -40,18 +47,17 @@ function ProfilePage() {
         <ProgressDonutCard />
       </div>
       <div>
-        <SubmissionsHeader />
+        <SubmissionsHeader query={query} setQuery={setQuery} />
       </div>
       {/* Submissions */}
       {data.length !== 0 && (
         <>
           <div>
-            {data.map((submission, index) => (
+            {filteredData.map((submission, index) => (
               <SubmissionCard
                 key={index}
-                Headline={submission.headline}
+                Headline={submission.title}
                 DueDate={submission.dueDate}
-                instructorName={submission.instructorName}
               />
             ))}
           </div>
