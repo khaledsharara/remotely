@@ -1,15 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getEmployee } from "../utils/managerApis";
-import { ChecklistItem, Task } from "../utils/types";
+import { Task } from "../utils/types";
 import toast, { Toaster } from "react-hot-toast";
-
-const employees = [
-  { primaryKey: "1", name: "Ada Lovelace" },
-  { primaryKey: "2", name: "Alan Turing" },
-  { primaryKey: "3", name: "Grace Hopper" },
-  // Add more filler employees as needed
-];
 
 function EmployeeProfile() {
   const { id } = useParams();
@@ -65,7 +58,7 @@ function EmployeeProfile() {
           <div>
             <div className="text-title font-medium">{employee.name}</div>
             <div className="border-[1px] border-black w-fit rounded-full px-4 mt-2">
-              Front-end
+              {employee.role}
             </div>
             <div className="flex border-[1px] border-black w-fit rounded-full px-4 mt-2 ">
               <button onClick={() => handleCardClick(employee.uid)}>

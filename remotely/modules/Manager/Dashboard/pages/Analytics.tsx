@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { generateAnalytics } from "../utils/managerApis";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../shared/utils/userSlice";
 
 function AnalyticsTable() {
+  const user = useSelector(selectUser);
   const [analyticsData, setAnalyticsData] = useState<
     { uid: string; name: string; completionRate: number }[]
   >([]);
@@ -11,7 +14,7 @@ function AnalyticsTable() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const response = await generateAnalytics();
+        const response = await generateAnalytics(user.user ?? "");
         setAnalyticsData(response.data);
       } catch (err) {
         setError("Failed to fetch analytics data");

@@ -169,12 +169,15 @@ export const completeTask = async (taskId: string) => {
   }
 };
 
-export const generateAnalytics = async () => {
+export const generateAnalytics = async (managerUid: string) => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/managers/analytics`);
+    const response = await axios.get(`${BASE_URL}/api/managers/analytics`, {
+      params: { managerUid }, // Pass managerUid as a query parameter
+    });
     const analytics = response.data;
     return analytics;
   } catch (error) {
     console.error("Failed to get analytics", error);
+    throw error; // Optionally rethrow the error for higher-level handling
   }
 };

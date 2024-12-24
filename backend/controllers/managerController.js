@@ -1,4 +1,5 @@
-const { db } = require("../firebaseConfig");
+const { createUserWithEmailAndPassword } = require("firebase/auth");
+const { db, auth } = require("../firebaseConfig");
 
 exports.addTask = async (req, res) => {
   try {
@@ -87,7 +88,7 @@ exports.createManager = async (req, res) => {
     await employeeRef.set(newEmployee);
 
     return res.status(200).json({
-      message: "Employee created successfully",
+      message: "Manager created successfully",
       data: {
         uid,
         name,
@@ -96,7 +97,7 @@ exports.createManager = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error creating employee:", error);
+    console.error("Error creating manager:", error);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -400,6 +401,30 @@ exports.completeTask = async (req, res) => {
 // Generate analytics for each employee
 exports.generateAnalytics = async (req, res) => {
   try {
+    const { managerUid } = req.query;
+
+    if (!managerUid) {
+      return res.status(400).json({ error: "Manager UID is required." });
+    }
+
+    // Fetch manager's employees
+    const managerRef = db.ref(`managers/${managerUid}`);
+    const managerSnapshot = await managerRef.once("value");
+
+    if (!managerSnapshot.exists()) {
+      return res.status(404).json({ error: "Manager not found." });
+    }
+
+    const managerData = managerSnapshot.val();
+    const employeeUids = managerData.employees || [];
+
+    if (employeeUids.length === 0) {
+      return res
+        .status(200)
+        .json({ message: "No employees found for this manager.", data: [] });
+    }
+
+    // Fetch employees and calculate analytics
     const employeesRef = db.ref("employees");
     const employeesSnapshot = await employeesRef.once("value");
 
@@ -407,29 +432,32 @@ exports.generateAnalytics = async (req, res) => {
 
     employeesSnapshot.forEach((employeeSnapshot) => {
       const employeeData = employeeSnapshot.val();
-      const tasks = employeeData.tasks || {};
 
-      let completedTasks = 0;
-      let totalTasks = 0;
+      if (employeeUids.includes(employeeData.uid)) {
+        const tasks = employeeData.tasks || {};
 
-      Object.values(tasks).forEach((task) => {
-        totalTasks++;
-        if (task.completed) {
-          completedTasks++;
-        }
-      });
+        let completedTasks = 0;
+        let totalTasks = 0;
 
-      const completionRate = totalTasks > 0 ? completedTasks / totalTasks : 0;
+        Object.values(tasks).forEach((task) => {
+          totalTasks++;
+          if (task.completed) {
+            completedTasks++;
+          }
+        });
 
-      analytics.push({
-        uid: employeeData.uid,
-        name: employeeData.name,
-        completionRate,
-      });
+        const completionRate = totalTasks > 0 ? completedTasks / totalTasks : 0;
+
+        analytics.push({
+          uid: employeeData.uid,
+          name: employeeData.name,
+          completionRate,
+        });
+      }
     });
 
     return res.status(200).json({
-      message: "Analytics generated successfully.",
+      message: "Analytics generated successfully for the manager's employees.",
       data: analytics,
     });
   } catch (error) {
